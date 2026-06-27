@@ -1,0 +1,1271 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hồ sơ Phát triển Năng lực &amp; Định hướng Nghề nghiệp THPT — Hướng Nghiệp Alpha</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<style>
+:root{
+  --navy:#142768;
+  --navy-2:#1d3690;
+  --amber:#F6B115;
+  --amber-soft:#FFF4D8;
+  --ink:#1b2333;
+  --muted:#5b657a;
+  --line:#e3e7f0;
+  --bg:#f5f7fc;
+  --card:#ffffff;
+  --good:#1f9d6b;
+  --warn:#d98b00;
+  --shadow:0 1px 2px rgba(20,39,104,.06),0 8px 28px rgba(20,39,104,.08);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
+  color:var(--ink);background:var(--bg);line-height:1.5;-webkit-font-smoothing:antialiased;
+}
+button{font-family:inherit}
+a{color:var(--navy-2)}
+
+/* ---------- Top bar ---------- */
+.topbar{
+  position:sticky;top:0;z-index:40;background:var(--navy);color:#fff;
+  display:flex;align-items:center;gap:14px;padding:10px 18px;
+  box-shadow:0 2px 14px rgba(20,39,104,.25);
+}
+.brand{display:flex;align-items:center;gap:11px;min-width:0}
+.logo{
+  width:40px;height:40px;border-radius:10px;background:var(--amber);
+  display:grid;place-items:center;color:var(--navy);font-weight:800;font-size:20px;
+  flex:0 0 auto;box-shadow:inset 0 0 0 2px rgba(255,255,255,.25);
+}
+.brand h1{font-size:15px;margin:0;font-weight:700;letter-spacing:.2px}
+.brand p{font-size:11px;margin:0;color:#c8d2f2}
+.topbar .spacer{flex:1}
+.tbtn{
+  background:rgba(255,255,255,.10);color:#fff;border:1px solid rgba(255,255,255,.22);
+  padding:8px 13px;border-radius:9px;font-size:12.5px;font-weight:600;cursor:pointer;
+  display:inline-flex;align-items:center;gap:6px;transition:.15s;
+}
+.tbtn:hover{background:rgba(255,255,255,.2)}
+.tbtn.amber{background:var(--amber);color:var(--navy);border-color:var(--amber)}
+.tbtn.amber:hover{filter:brightness(1.05)}
+.tbtn svg{width:15px;height:15px}
+
+/* ---------- Layout ---------- */
+.shell{display:flex;max-width:1280px;margin:0 auto;gap:0;align-items:flex-start}
+.sidebar{
+  width:288px;flex:0 0 288px;padding:18px 14px 60px;position:sticky;top:60px;
+  height:calc(100vh - 60px);overflow-y:auto;
+}
+.main{flex:1;min-width:0;padding:22px 26px 90px}
+.progress-wrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 14px;margin-bottom:14px;box-shadow:var(--shadow)}
+.progress-wrap .lbl{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:600;margin-bottom:7px}
+.progress-track{height:8px;background:#e9edf6;border-radius:99px;overflow:hidden}
+.progress-bar{height:100%;background:linear-gradient(90deg,var(--navy),var(--navy-2));width:0;transition:width .4s}
+
+.nav-part{margin-top:6px}
+.nav-part>.part-h{
+  display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.6px;
+  text-transform:uppercase;color:var(--navy);padding:11px 8px 6px;
+}
+.nav-part>.part-h .pn{
+  width:20px;height:20px;border-radius:6px;background:var(--amber-soft);color:var(--navy);
+  display:grid;place-items:center;font-size:11px;flex:0 0 auto;
+}
+.nav-item{
+  display:flex;align-items:center;gap:9px;width:100%;text-align:left;border:none;background:none;
+  padding:8px 10px;border-radius:9px;font-size:13px;color:var(--ink);cursor:pointer;font-weight:500;
+  transition:.12s;
+}
+.nav-item:hover{background:#eef1f9}
+.nav-item.active{background:var(--navy);color:#fff;font-weight:600}
+.nav-item.active .dot{background:var(--amber)}
+.nav-item .dot{width:7px;height:7px;border-radius:99px;background:#c4ccdf;flex:0 0 auto}
+.nav-item.done .dot{background:var(--good)}
+.nav-item.active.done .dot{background:var(--amber)}
+
+.opt-head{
+  font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--amber);
+  padding:14px 8px 4px;display:flex;align-items:center;gap:7px;
+}
+
+/* ---------- Content cards ---------- */
+.page-head{margin-bottom:18px}
+.eyebrow{font-size:11.5px;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--amber);margin-bottom:4px}
+.page-head h2{font-size:25px;margin:0 0 6px;color:var(--navy);font-weight:800;line-height:1.2}
+.page-head .sub{color:var(--muted);font-size:14px;max-width:680px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px 22px;margin-bottom:16px;box-shadow:var(--shadow)}
+.card h3{font-size:15px;margin:0 0 4px;color:var(--navy);font-weight:700;display:flex;align-items:center;gap:8px}
+.card .hint{font-size:12.5px;color:var(--muted);margin:0 0 14px}
+.card h3 .tag{margin-left:auto;font-size:11px;font-weight:700;color:var(--navy);background:var(--amber-soft);padding:3px 9px;border-radius:99px}
+
+.grid{display:grid;gap:14px}
+.grid.c2{grid-template-columns:1fr 1fr}
+.grid.c3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:720px){.grid.c2,.grid.c3{grid-template-columns:1fr}}
+
+.field label{display:block;font-size:12.5px;font-weight:600;color:var(--ink);margin-bottom:5px}
+.field .desc{font-size:11.5px;color:var(--muted);font-weight:400;margin-left:2px}
+.field input,.field textarea,.field select{
+  width:100%;border:1px solid var(--line);border-radius:10px;padding:10px 12px;font-size:13.5px;
+  font-family:inherit;color:var(--ink);background:#fff;transition:.12s;
+}
+.field input:focus,.field textarea:focus,.field select:focus{
+  outline:none;border-color:var(--navy-2);box-shadow:0 0 0 3px rgba(29,54,144,.12)
+}
+.field textarea{resize:vertical;min-height:74px;line-height:1.55}
+
+/* ---------- Tables (repeaters) ---------- */
+.rep table{width:100%;border-collapse:collapse;font-size:13px}
+.rep th{
+  text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--navy);
+  font-weight:800;padding:8px 9px;border-bottom:2px solid var(--amber-soft);background:#fbfcfe;
+}
+.rep td{padding:6px 7px;border-bottom:1px solid var(--line);vertical-align:top}
+.rep td input,.rep td textarea,.rep td select{
+  width:100%;border:1px solid transparent;border-radius:7px;padding:7px 8px;font-size:13px;
+  font-family:inherit;background:#f8fafd;
+}
+.rep td textarea{min-height:40px;resize:vertical;line-height:1.45}
+.rep td input:focus,.rep td textarea:focus,.rep td select:focus{outline:none;border-color:var(--navy-2);background:#fff}
+.rep td.del{width:34px;text-align:center}
+.rowdel{background:none;border:none;color:#c0394b;cursor:pointer;font-size:17px;line-height:1;opacity:.55;padding:4px}
+.rowdel:hover{opacity:1}
+.addrow{
+  margin-top:11px;background:var(--amber-soft);color:var(--navy);border:1px dashed var(--amber);
+  padding:9px 14px;border-radius:9px;font-size:12.5px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:6px;
+}
+.addrow:hover{background:#ffeec0}
+
+/* ---------- Assessment (Holland / Gardner) ---------- */
+.assess-q{display:flex;align-items:center;gap:14px;padding:10px 0;border-bottom:1px solid var(--line)}
+.assess-q:last-child{border-bottom:none}
+.assess-q .qt{flex:1;font-size:13.5px}
+.scale{display:flex;gap:5px;flex:0 0 auto}
+.scale button{
+  width:34px;height:34px;border-radius:8px;border:1px solid var(--line);background:#fff;cursor:pointer;
+  font-size:13px;font-weight:700;color:var(--muted);transition:.12s;
+}
+.scale button:hover{border-color:var(--navy-2)}
+.scale button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.scale-legend{font-size:11.5px;color:var(--muted);margin:2px 0 10px;display:flex;gap:18px;flex-wrap:wrap}
+.result-card{background:linear-gradient(135deg,var(--navy),var(--navy-2));color:#fff;border-radius:16px;padding:20px 22px;margin-bottom:16px}
+.result-card h3{color:#fff;margin:0 0 12px}
+.bars{display:flex;flex-direction:column;gap:9px}
+.barline{display:flex;align-items:center;gap:11px}
+.barline .nm{width:128px;flex:0 0 128px;font-size:12.5px;font-weight:600}
+.barline .tr{flex:1;height:13px;background:rgba(255,255,255,.16);border-radius:99px;overflow:hidden}
+.barline .fl{height:100%;background:var(--amber);border-radius:99px;width:0;transition:width .6s}
+.barline .vv{width:30px;text-align:right;font-size:12px;font-weight:700;color:var(--amber)}
+.code-pill{display:inline-flex;gap:7px;margin-top:14px;flex-wrap:wrap}
+.code-pill span{background:var(--amber);color:var(--navy);font-weight:800;padding:6px 13px;border-radius:99px;font-size:14px;letter-spacing:1px}
+.top-note{font-size:12.5px;color:#d3dcf6;margin-top:11px}
+
+/* ---------- Dashboard ---------- */
+.dash-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.dash-grid{grid-template-columns:1fr}}
+.dash-item{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px 17px}
+.dash-item .dl{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.stars{font-size:22px;letter-spacing:3px;color:var(--amber);margin-top:7px}
+.stars .e{color:#dfe4ef}
+.dash-item .dnote{font-size:12px;color:var(--muted);margin-top:5px}
+
+.callout{background:var(--amber-soft);border:1px solid #f3dca0;border-radius:13px;padding:14px 16px;font-size:13px;color:#6b5413;display:flex;gap:11px}
+.callout b{color:var(--navy)}
+.callout .ic{font-size:18px;flex:0 0 auto}
+
+.cycle{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:6px}
+@media(max-width:720px){.cycle{grid-template-columns:1fr 1fr}}
+.cycle .c{background:#fff;border:1px solid var(--line);border-top:3px solid var(--amber);border-radius:12px;padding:13px}
+.cycle .c .t{font-size:13px;font-weight:800;color:var(--navy)}
+.cycle .c .d{font-size:12px;color:var(--muted);margin-top:5px}
+
+.save-flag{font-size:12px;color:var(--muted);margin-left:6px}
+.toast{
+  position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);
+  background:var(--navy);color:#fff;padding:12px 20px;border-radius:11px;font-size:13.5px;font-weight:600;
+  box-shadow:0 10px 30px rgba(20,39,104,.35);opacity:0;pointer-events:none;transition:.3s;z-index:90;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.ok{background:var(--good)}
+
+.module-foot{display:flex;justify-content:space-between;align-items:center;margin-top:8px;gap:10px}
+.ghost{background:#eef1f9;color:var(--navy);border:none;padding:10px 16px;border-radius:10px;font-weight:600;font-size:13px;cursor:pointer}
+.ghost:hover{background:#e3e8f6}
+.primary{background:var(--navy);color:#fff;border:none;padding:10px 18px;border-radius:10px;font-weight:700;font-size:13px;cursor:pointer}
+.primary:hover{background:var(--navy-2)}
+
+.hide{display:none!important}
+
+/* ---------- PDF render area ---------- */
+#pdfArea{position:fixed;left:-9999px;top:0}
+.pdf-page{
+  width:794px;min-height:1123px;background:#fff;position:relative;padding:0;
+  font-family:"Be Vietnam Pro","Segoe UI",system-ui,Arial,sans-serif;color:#1b2333;
+}
+.pdf-page .ph{background:#142768;color:#fff;padding:18px 42px;display:flex;align-items:center;gap:13px}
+.pdf-page .ph .lg{width:38px;height:38px;border-radius:9px;background:#F6B115;color:#142768;display:grid;place-items:center;font-weight:800;font-size:19px}
+.pdf-page .ph .ht{font-size:15px;font-weight:700}
+.pdf-page .ph .hs{font-size:11px;color:#c8d2f2}
+.pdf-body{padding:26px 42px 90px}
+.pdf-page .pf{position:absolute;left:0;right:0;bottom:0;background:#142768;color:#fff;font-size:10.5px;text-align:center;padding:9px 20px;line-height:1.5}
+.pdf-page .pf b{color:#F6B115}
+.pdf-title{font-size:20px;font-weight:800;color:#142768;line-height:1.25;margin:0 0 4px}
+.pdf-sub{font-size:12px;color:#5b657a;margin:0 0 18px}
+.pdf-sec{font-size:13px;font-weight:800;color:#142768;text-transform:uppercase;letter-spacing:.5px;border-left:4px solid #F6B115;padding:4px 0 4px 11px;margin:20px 0 11px;background:#FFF4D8}
+.pdf-sub-h{font-size:13px;font-weight:700;color:#1d3690;margin:15px 0 7px}
+.pdf-kv{display:grid;grid-template-columns:160px 1fr;gap:4px 14px;font-size:12.5px;margin-bottom:5px}
+.pdf-kv .k{color:#5b657a;font-weight:600}
+.pdf-kv .v{color:#1b2333;white-space:pre-wrap}
+.pdf-text{font-size:12.5px;white-space:pre-wrap;margin:0 0 9px;line-height:1.55}
+.pdf-tbl{width:100%;border-collapse:collapse;font-size:11.5px;margin:6px 0 12px}
+.pdf-tbl th{background:#142768;color:#fff;text-align:left;padding:7px 8px;font-weight:600}
+.pdf-tbl td{border:1px solid #dfe4ef;padding:6px 8px;vertical-align:top;white-space:pre-wrap}
+.pdf-tbl tr:nth-child(even) td{background:#f7f9fc}
+.pdf-bar{display:flex;align-items:center;gap:9px;margin:4px 0}
+.pdf-bar .n{width:150px;font-size:11.5px;font-weight:600}
+.pdf-bar .t{flex:1;height:11px;background:#e9edf6;border-radius:99px;overflow:hidden}
+.pdf-bar .f{height:100%;background:#142768;border-radius:99px}
+.pdf-bar .vv{width:34px;text-align:right;font-size:11px;font-weight:700;color:#1d3690}
+.pdf-cover{display:flex;flex-direction:column;justify-content:center;min-height:1123px;padding:0 60px;text-align:center}
+.pdf-cover .cv-lg{width:74px;height:74px;border-radius:18px;background:#F6B115;color:#142768;display:grid;place-items:center;font-weight:800;font-size:38px;margin:0 auto 26px}
+.pdf-cover .cv-org{font-size:15px;font-weight:800;color:#142768;letter-spacing:1px;text-transform:uppercase}
+.pdf-cover .cv-tl{font-size:32px;font-weight:800;color:#142768;line-height:1.2;margin:18px 0 12px}
+.pdf-cover .cv-dv{width:70px;height:4px;background:#F6B115;border-radius:9px;margin:0 auto 16px}
+.pdf-cover .cv-sub{font-size:13.5px;color:#5b657a;max-width:520px;margin:0 auto 30px;line-height:1.6}
+.pdf-cover .cv-name{font-size:22px;font-weight:800;color:#1d3690}
+.pdf-cover .cv-meta{font-size:13px;color:#5b657a;margin-top:6px}
+.pdf-cover .cv-tag{margin-top:40px;font-size:13px;font-style:italic;color:#142768}
+.pdf-stars{font-size:17px;letter-spacing:2px;color:#F6B115}
+.pdf-stars .e{color:#dfe4ef}
+
+@media(max-width:880px){
+  .sidebar{position:fixed;left:0;top:60px;z-index:35;background:var(--bg);box-shadow:6px 0 22px rgba(0,0,0,.12);transform:translateX(-104%);transition:.25s}
+  .sidebar.open{transform:translateX(0)}
+  .menu-toggle{display:inline-flex!important}
+}
+.menu-toggle{display:none}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <button class="tbtn menu-toggle" id="menuToggle" aria-label="Menu">☰</button>
+  <div class="brand">
+    <div class="logo">A</div>
+    <div>
+      <h1>Hồ sơ Phát triển Năng lực &amp; Định hướng Nghề nghiệp</h1>
+      <p>Hướng Nghiệp Alpha · Biến ước mơ thành sự nghiệp</p>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <button class="tbtn" id="btnSave" title="Lưu vào trình duyệt">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
+    Lưu
+  </button>
+  <button class="tbtn" id="btnExport" title="Tải file dữ liệu (.json)">Sao lưu</button>
+  <button class="tbtn" id="btnImport" title="Nạp file dữ liệu (.json)">Khôi phục</button>
+  <input type="file" id="fileImport" accept="application/json" class="hide">
+  <button class="tbtn amber" id="btnPdf">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15h6"/></svg>
+    Xuất PDF
+  </button>
+</div>
+
+<div class="shell">
+  <aside class="sidebar" id="sidebar">
+    <div class="progress-wrap">
+      <div class="lbl"><span>Tiến độ hoàn thiện hồ sơ</span><span id="progPct">0%</span></div>
+      <div class="progress-track"><div class="progress-bar" id="progBar"></div></div>
+    </div>
+    <nav id="nav"></nav>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<div id="pdfArea"></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ============================================================
+   HỒ SƠ PHÁT TRIỂN NĂNG LỰC & ĐỊNH HƯỚNG NGHỀ NGHIỆP THPT
+   Hướng Nghiệp Alpha — single-file app
+   ============================================================ */
+"use strict";
+
+var FOOTER = 'Hướng Nghiệp Alpha | Hotline: 096 937 4411 | Email: huongnghiepalpha@gmail.com | www.huongnghiepalpha.vn';
+
+/* ---------- Trạng thái ---------- */
+var STATE = { v:1, fields:{}, tables:{}, holland:{}, gardner:{}, opened:{} };
+
+/* ---------- HOLLAND (RIASEC — tên ILO tiếng Việt) ---------- */
+var HOLLAND_GROUPS = [
+  { key:'R', name:'Kỹ thuật', en:'Realistic', desc:'Thích làm việc với máy móc, công cụ, vật thật, hoạt động ngoài trời.' },
+  { key:'I', name:'Nghiên cứu', en:'Investigative', desc:'Thích quan sát, phân tích, tìm tòi, giải quyết vấn đề bằng tư duy.' },
+  { key:'A', name:'Nghệ thuật', en:'Artistic', desc:'Thích sáng tạo, thể hiện cảm xúc, làm việc tự do và giàu trí tưởng tượng.' },
+  { key:'S', name:'Xã hội', en:'Social', desc:'Thích giúp đỡ, dạy dỗ, chăm sóc và làm việc cùng con người.' },
+  { key:'E', name:'Quản lý', en:'Enterprising', desc:'Thích lãnh đạo, thuyết phục, khởi xướng, kinh doanh và gây ảnh hưởng.' },
+  { key:'C', name:'Nghiệp vụ', en:'Conventional', desc:'Thích sự ngăn nắp, quy trình, số liệu, dữ liệu và công việc có tổ chức.' }
+];
+var HOLLAND_ITEMS = {
+  R:['Tôi thích lắp ráp, sửa chữa hoặc chế tạo đồ vật bằng tay.',
+     'Tôi thích vận hành máy móc, thiết bị, dụng cụ kỹ thuật.',
+     'Tôi thích các hoạt động thể chất, thể thao, ngoài trời.',
+     'Tôi thích làm việc với những thứ cụ thể hơn là ý tưởng trừu tượng.',
+     'Tôi thấy thoải mái khi làm việc thực hành, tạo ra sản phẩm thật.'],
+  I:['Tôi thích tìm hiểu nguyên nhân, cách thức vận hành của sự vật.',
+     'Tôi thích giải các bài toán, câu đố, vấn đề hóc búa.',
+     'Tôi thích đọc sách khoa học, làm thí nghiệm, nghiên cứu.',
+     'Tôi thích phân tích dữ liệu và rút ra kết luận logic.',
+     'Tôi tò mò và thường đặt nhiều câu hỏi "tại sao".'],
+  A:['Tôi thích vẽ, viết, âm nhạc, thiết kế hoặc biểu diễn.',
+     'Tôi có nhiều ý tưởng mới lạ và trí tưởng tượng phong phú.',
+     'Tôi thích thể hiện cảm xúc, cá tính qua sản phẩm sáng tạo.',
+     'Tôi thích môi trường tự do, ít khuôn mẫu cứng nhắc.',
+     'Tôi đánh giá cao cái đẹp, sự độc đáo và thẩm mỹ.'],
+  S:['Tôi thích giúp đỡ, hỗ trợ và lắng nghe người khác.',
+     'Tôi thích giảng giải, hướng dẫn, dạy cho bạn bè điều gì đó.',
+     'Tôi quan tâm đến cảm xúc và nhu cầu của mọi người.',
+     'Tôi thích làm việc nhóm và xây dựng quan hệ tốt.',
+     'Tôi thấy ý nghĩa khi đóng góp cho cộng đồng, xã hội.'],
+  E:['Tôi thích dẫn dắt, tổ chức và đưa ra quyết định.',
+     'Tôi thích thuyết phục, đàm phán và gây ảnh hưởng tới người khác.',
+     'Tôi thích đặt mục tiêu lớn và cạnh tranh để đạt được.',
+     'Tôi quan tâm tới kinh doanh, bán hàng, khởi nghiệp.',
+     'Tôi tự tin nói trước đám đông và bảo vệ quan điểm của mình.'],
+  C:['Tôi thích sắp xếp công việc gọn gàng, có thứ tự rõ ràng.',
+     'Tôi thích làm việc với con số, bảng biểu, dữ liệu chính xác.',
+     'Tôi thích tuân theo quy trình, hướng dẫn cụ thể.',
+     'Tôi cẩn thận, chú ý chi tiết và ít sai sót.',
+     'Tôi thích công việc ổn định, rõ ràng về kỳ vọng.']
+};
+
+/* ---------- GARDNER (9 loại hình trí thông minh) ---------- */
+var GARDNER_TYPES = [
+  { key:'ngonngu', name:'Ngôn ngữ', desc:'Nhạy với từ ngữ, đọc–viết–nói tốt.' },
+  { key:'logic',   name:'Logic – Toán', desc:'Tư duy con số, suy luận, lập luận.' },
+  { key:'khonggian',name:'Không gian – Thị giác', desc:'Hình ảnh, màu sắc, bố cục, thiết kế.' },
+  { key:'vandong', name:'Vận động cơ thể', desc:'Khéo léo, thể thao, làm việc bằng tay.' },
+  { key:'amnhac',  name:'Âm nhạc', desc:'Giai điệu, nhịp điệu, âm thanh.' },
+  { key:'tuongtac',name:'Tương tác (giao tiếp)', desc:'Hiểu người khác, làm việc nhóm.' },
+  { key:'noitam',  name:'Nội tâm', desc:'Hiểu chính mình, tự nhận thức.' },
+  { key:'tunhien', name:'Tự nhiên', desc:'Yêu thiên nhiên, cây cối, động vật, môi trường.' },
+  { key:'hiensinh',name:'Hiện sinh (triết học)', desc:'Suy ngẫm câu hỏi lớn về ý nghĩa cuộc sống.' }
+];
+var GARDNER_ITEMS = {
+  ngonngu:['Tôi diễn đạt ý tưởng bằng lời nói/viết một cách trôi chảy.','Tôi thích đọc sách, kể chuyện, chơi chữ.','Tôi nhớ tốt các câu trích, từ ngữ, thông tin bằng lời.','Tôi thích tranh luận và thuyết trình.'],
+  logic:['Tôi giải toán và suy luận logic dễ dàng.','Tôi thích tìm quy luật, hệ thống trong sự vật.','Tôi thích chơi cờ, giải đố, lập trình.','Tôi đặt câu hỏi và phân tích vấn đề theo từng bước.'],
+  khonggian:['Tôi hình dung không gian, hình khối tốt trong đầu.','Tôi thích vẽ, thiết kế, chụp ảnh, sắp xếp bố cục.','Tôi định hướng đường đi và bản đồ tốt.','Tôi nhạy với màu sắc và hình ảnh.'],
+  vandong:['Tôi học nhanh qua thực hành, vận động.','Tôi khéo tay khi làm thủ công, thí nghiệm, thể thao.','Tôi khó ngồi yên lâu, thích chuyển động.','Tôi phối hợp tay–chân–mắt tốt.'],
+  amnhac:['Tôi nhạy với giai điệu, nhịp điệu, âm thanh.','Tôi thích hát, chơi nhạc cụ, nghe nhạc khi học.','Tôi dễ nhớ bài hát và nhận ra nốt sai.','Tôi hay gõ nhịp, ngân nga theo nhạc.'],
+  tuongtac:['Tôi dễ hiểu cảm xúc và suy nghĩ của người khác.','Tôi thích làm việc nhóm và kết bạn.','Tôi thường được nhờ làm trung gian, hòa giải.','Tôi giao tiếp và thuyết phục tốt.'],
+  noitam:['Tôi hiểu rõ điểm mạnh, điểm yếu của bản thân.','Tôi thích suy ngẫm, viết nhật ký, tự đặt mục tiêu.','Tôi tự chủ và biết điều gì quan trọng với mình.','Tôi làm việc độc lập hiệu quả.'],
+  tunhien:['Tôi yêu thiên nhiên, cây cối, động vật.','Tôi thích quan sát, phân loại sự vật trong tự nhiên.','Tôi quan tâm đến môi trường và bảo vệ Trái Đất.','Tôi thích các hoạt động ngoài trời, dã ngoại.'],
+  hiensinh:['Tôi hay suy nghĩ về ý nghĩa và mục đích cuộc sống.','Tôi thích bàn về các câu hỏi lớn: con người, vũ trụ, đạo đức.','Tôi quan tâm đến giá trị, niềm tin, lẽ sống.','Tôi nhìn vấn đề ở bức tranh tổng thể, dài hạn.']
+};
+
+/* ---------- CẤU TRÚC HỒ SƠ ---------- */
+var PHONGCACH = ['Học qua nhìn (hình ảnh)','Học qua nghe','Học qua đọc–viết','Học qua thực hành','Kết hợp nhiều cách'];
+
+var SECTIONS = [
+{ pn:'I', part:'Nhận diện bản thân', tagline:'Tôi là ai?', modules:[
+  { id:'m1', title:'Hồ sơ cá nhân', eyebrow:'Module 1', sub:'Thông tin nền tảng về bản thân, gia đình và ước mơ ban đầu của em.', cards:[
+    { h:'Thông tin cơ bản', fields:[
+      {t:'text',k:'hoten',l:'Họ và tên',w:'half'},
+      {t:'date',k:'ngaysinh',l:'Ngày sinh',w:'half'},
+      {t:'select',k:'gioitinh',l:'Giới tính',opts:['Nam','Nữ','Khác'],w:'half'},
+      {t:'text',k:'truong',l:'Trường đang học',w:'half'},
+      {t:'text',k:'lop',l:'Lớp',w:'half'},
+      {t:'text',k:'namhoc',l:'Năm học',ph:'VD: 2025–2026',w:'half'},
+      {t:'text',k:'diachi',l:'Địa chỉ',w:'full'},
+      {t:'text',k:'sdt',l:'Số điện thoại',w:'half'},
+      {t:'text',k:'email',l:'Email',w:'half'} ]},
+    { h:'Gia đình & điều kiện học tập', fields:[
+      {t:'text',k:'bo_ten',l:'Họ tên cha',w:'half'},
+      {t:'text',k:'bo_nghe',l:'Nghề nghiệp của cha',w:'half'},
+      {t:'text',k:'me_ten',l:'Họ tên mẹ',w:'half'},
+      {t:'text',k:'me_nghe',l:'Nghề nghiệp của mẹ',w:'half'},
+      {t:'area',k:'dieukien',l:'Điều kiện học tập',d:'Góc học, thiết bị, internet, thời gian tự học…',w:'full'},
+      {t:'area',k:'hotro_gd',l:'Mong muốn / kỳ vọng của gia đình',w:'full'} ]},
+    { h:'Ước mơ ban đầu', fields:[
+      {t:'area',k:'uocmo',l:'Ước mơ / điều em mong trở thành',w:'full'},
+      {t:'text',k:'thantuong',l:'Người truyền cảm hứng cho em',ph:'VD: một nghề, một nhân vật…',w:'full'} ]}
+  ]},
+  { id:'m2', title:'Khám phá bản thân — Hiểu mình', eyebrow:'Module 2', sub:'Dùng trắc nghiệm sở thích Holland và 9 loại hình trí thông minh Gardner để hiểu rõ chính mình.', cards:[
+    { h:'① Trắc nghiệm sở thích nghề nghiệp Holland (RIASEC)', special:'holland' },
+    { h:'② 9 loại hình trí thông minh (Howard Gardner)', special:'gardner' },
+    { h:'③ Giá trị sống & phong cách học', fields:[
+      {t:'area',k:'giatri',l:'Giá trị sống quan trọng với em',d:'VD: trung thực, gia đình, sáng tạo, tự do, cống hiến…',w:'full'},
+      {t:'area',k:'sothich',l:'Sở thích & hoạt động em yêu thích',w:'half'},
+      {t:'area',k:'diemmanh',l:'Điểm mạnh của em',w:'half'},
+      {t:'area',k:'caithien',l:'Điểm cần cải thiện',w:'half'},
+      {t:'select',k:'phongcach',l:'Phong cách học nổi bật',opts:PHONGCACH,w:'half'},
+      {t:'area',k:'dongluc',l:'Điều tạo động lực cho em',w:'full'} ]}
+  ]},
+  { id:'m3', title:'Hồ sơ năng lực', eyebrow:'Module 3', sub:'Tự đánh giá 10 năng lực cốt lõi theo Chương trình GDPT 2018 — kèm minh chứng và kế hoạch phát triển.', cards:[
+    { h:'Đánh giá năng lực (thang 1–5)', hint:'3 năng lực chung + 7 năng lực đặc thù. Hãy ghi minh chứng cụ thể thay vì chỉ chấm điểm.', table:{ k:'nangluc', fixed:true, cols:[
+      {k:'nl',l:'Năng lực',t:'text',w:'22%'},
+      {k:'muc',l:'Mức',t:'select',opts:['1','2','3','4','5'],w:'70px'},
+      {k:'mc',l:'Minh chứng',t:'area',w:'34%'},
+      {k:'kh',l:'Kế hoạch phát triển',t:'area',w:'34%'} ],
+      defaultRows:[
+        {nl:'Tự chủ & tự học'},{nl:'Giao tiếp & hợp tác'},{nl:'Giải quyết vấn đề & sáng tạo'},
+        {nl:'Ngôn ngữ'},{nl:'Tính toán'},{nl:'Khoa học'},{nl:'Công nghệ'},
+        {nl:'Tin học'},{nl:'Thẩm mỹ'},{nl:'Thể chất'} ] } }
+  ]},
+  { id:'m4', title:'Hồ sơ phẩm chất', eyebrow:'Module 4', sub:'Năm phẩm chất theo Chương trình GDPT 2018. Không chấm điểm — chỉ ghi lại minh chứng từ đời sống và học tập.', cards:[
+    { h:'Năm phẩm chất chủ yếu', hint:'Mỗi phẩm chất hãy ghi 1–2 việc làm cụ thể thể hiện em đã sống phẩm chất đó.', table:{ k:'phamchat', fixed:true, cols:[
+      {k:'pc',l:'Phẩm chất',t:'text',w:'20%'},
+      {k:'mc',l:'Minh chứng (việc làm cụ thể)',t:'area',w:'56%'},
+      {k:'tg',l:'Thời điểm',t:'text',w:'20%'} ],
+      defaultRows:[ {pc:'Yêu nước'},{pc:'Nhân ái'},{pc:'Chăm chỉ'},{pc:'Trung thực'},{pc:'Trách nhiệm'} ] } }
+  ]}
+]},
+
+{ pn:'II', part:'Phát triển năng lực', tagline:'Tôi làm được gì?', modules:[
+  { id:'m5', title:'Học tập', eyebrow:'Module 5', sub:'Không chỉ là điểm số — mà là môn mạnh, môn cần cải thiện, kế hoạch và sự tiến bộ qua từng học kỳ.', cards:[
+    { h:'Tổng quan học tập', fields:[
+      {t:'text',k:'hocluc',l:'Học lực / GPA gần nhất',w:'half'},
+      {t:'text',k:'hanhkiem',l:'Hạnh kiểm / Rèn luyện',w:'half'},
+      {t:'area',k:'monmanh',l:'Môn học mạnh',w:'half'},
+      {t:'area',k:'moncaithien',l:'Môn cần cải thiện',w:'half'},
+      {t:'area',k:'kehoach_hoc',l:'Kế hoạch học tập sắp tới',w:'full'} ]},
+    { h:'Theo dõi kết quả từng học kỳ', table:{ k:'hocky', cols:[
+      {k:'hk',l:'Học kỳ',t:'text',w:'18%'},
+      {k:'dtb',l:'Điểm TB',t:'text',w:'14%'},
+      {k:'noibat',l:'Môn nổi bật',t:'text',w:'24%'},
+      {k:'tienbo',l:'Tiến bộ / Nhận xét',t:'area',w:'40%'} ] } }
+  ]},
+  { id:'m6', title:'Trải nghiệm', eyebrow:'Module 6', sub:'Mỗi hoạt động đều ghi theo mẫu: Vai trò → Kết quả → Điều học được → Minh chứng.', cards:[
+    { h:'Hoạt động trải nghiệm', hint:'CLB, tình nguyện, hoạt động trường lớp, sự kiện cộng đồng…', table:{ k:'trainghiem', cols:[
+      {k:'ten',l:'Tên hoạt động',t:'text',w:'22%'},
+      {k:'vaitro',l:'Vai trò',t:'text',w:'16%'},
+      {k:'ketqua',l:'Kết quả',t:'area',w:'22%'},
+      {k:'baihoc',l:'Điều học được',t:'area',w:'24%'},
+      {k:'mc',l:'Minh chứng',t:'text',w:'16%'} ] } }
+  ]},
+  { id:'m7', title:'Dự án', eyebrow:'Module 7', sub:'STEM, nghiên cứu, kinh doanh, AI, sách, podcast, website… không giới hạn loại hình.', cards:[
+    { h:'Dự án đã/đang thực hiện', table:{ k:'duan', cols:[
+      {k:'ten',l:'Tên dự án',t:'text',w:'22%'},
+      {k:'loai',l:'Loại',t:'select',opts:['STEM','Nghiên cứu','Kinh doanh','AI/Công nghệ','Sách/Viết','Podcast/Media','Website/App','Xã hội','Khác'],w:'15%'},
+      {k:'mota',l:'Mô tả & vai trò',t:'area',w:'30%'},
+      {k:'ketqua',l:'Kết quả',t:'area',w:'21%'},
+      {k:'link',l:'Link/Minh chứng',t:'text',w:'12%'} ] } }
+  ]},
+  { id:'m8', title:'Thành tích', eyebrow:'Module 8', sub:'Không chỉ giải thưởng — gồm cả chứng nhận, sản phẩm và sự công nhận từ cộng đồng.', cards:[
+    { h:'Thành tích & ghi nhận', table:{ k:'thanhtich', cols:[
+      {k:'ten',l:'Tên thành tích',t:'text',w:'30%'},
+      {k:'loai',l:'Loại',t:'select',opts:['Giải thưởng','Chứng nhận','Sản phẩm','Công nhận'],w:'15%'},
+      {k:'capdo',l:'Cấp độ',t:'select',opts:['Trường','Quận/Huyện','Tỉnh/TP','Quốc gia','Quốc tế'],w:'15%'},
+      {k:'tg',l:'Thời gian',t:'text',w:'15%'},
+      {k:'mc',l:'Minh chứng',t:'text',w:'20%'} ] } }
+  ]}
+]},
+
+{ pn:'III', part:'Định hướng nghề nghiệp', tagline:'Tôi muốn trở thành ai?', modules:[
+  { id:'m9', title:'Khám phá nghề', eyebrow:'Module 9', sub:'Đối chiếu nghề em quan tâm với yêu cầu thực tế và mức độ phù hợp của bản thân.', cards:[
+    { h:'Nghề nghiệp quan tâm', table:{ k:'nghe', cols:[
+      {k:'nghe',l:'Nghề',t:'text',w:'18%'},
+      {k:'lydo',l:'Lý do quan tâm',t:'area',w:'22%'},
+      {k:'yeucau',l:'Yêu cầu của nghề',t:'area',w:'22%'},
+      {k:'phuhop',l:'Điểm phù hợp',t:'area',w:'19%'},
+      {k:'phattrien',l:'Điều cần phát triển',t:'area',w:'19%'} ] } }
+  ]},
+  { id:'m10', title:'Khám phá ngành', eyebrow:'Module 10', sub:'Ngành học → môn cần học → lộ trình → việc làm → xu hướng tương lai.', cards:[
+    { h:'Ngành học quan tâm', table:{ k:'nganh', cols:[
+      {k:'nganh',l:'Ngành',t:'text',w:'18%'},
+      {k:'mon',l:'Tổ hợp / môn liên quan',t:'text',w:'20%'},
+      {k:'lotrinh',l:'Lộ trình đào tạo',t:'area',w:'22%'},
+      {k:'vieclam',l:'Cơ hội việc làm',t:'area',w:'20%'},
+      {k:'xuhuong',l:'Xu hướng',t:'area',w:'20%'} ] } }
+  ]},
+  { id:'m11', title:'Khám phá trường', eyebrow:'Module 11', sub:'Không thiên vị đại học — cân nhắc cả cao đẳng, học nghề và du học.', cards:[
+    { h:'Trường / con đường sau THPT', table:{ k:'truong', cols:[
+      {k:'truong',l:'Trường / Cơ sở',t:'text',w:'24%'},
+      {k:'bac',l:'Bậc',t:'select',opts:['Đại học','Cao đẳng','Trung cấp / Học nghề','Du học','Khác'],w:'16%'},
+      {k:'nganh',l:'Ngành dự kiến',t:'text',w:'20%'},
+      {k:'pt',l:'Phương thức xét tuyển',t:'text',w:'22%'},
+      {k:'gc',l:'Điểm chuẩn / Ghi chú',t:'text',w:'18%'} ] } }
+  ]},
+  { id:'m12', title:'Kế hoạch nghề nghiệp', eyebrow:'Module 12', sub:'Mục tiêu theo nguyên tắc SMART: Cụ thể · Đo lường được · Khả thi · Thực tế · Có thời hạn.', cards:[
+    { h:'Mục tiêu theo mốc thời gian', hint:'Mỗi mục tiêu nên rõ ràng và đo lường được.', fields:[
+      {t:'area',k:'smart1',l:'Mục tiêu 1 năm tới',w:'full'},
+      {t:'area',k:'smart3',l:'Mục tiêu 3 năm tới',w:'full'},
+      {t:'area',k:'smart5',l:'Mục tiêu 5 năm tới',w:'full'} ]},
+    { h:'Cam kết của em', fields:[
+      {t:'area',k:'camket',l:'Một câu cam kết với chính mình',ph:'VD: Em sẽ kiên trì mỗi ngày để…',w:'full'} ]}
+  ]}
+]},
+
+{ pn:'IV', part:'Hành trình phát triển', tagline:'Tôi trưởng thành thế nào?', modules:[
+  { id:'m13', title:'Nhật ký phát triển', eyebrow:'Module 13', sub:'Cuối mỗi học kỳ, em ghi lại điều tự hào, điều chưa thành công, bài học và mục tiêu mới.', cards:[
+    { h:'Nhật ký theo học kỳ', table:{ k:'nhatky', cols:[
+      {k:'hk',l:'Mốc thời gian',t:'text',w:'16%'},
+      {k:'tuhao',l:'Điều tự hào nhất',t:'area',w:'22%'},
+      {k:'thatbai',l:'Điều chưa thành công',t:'area',w:'21%'},
+      {k:'baihoc',l:'Bài học rút ra',t:'area',w:'21%'},
+      {k:'muctieu',l:'Mục tiêu mới',t:'area',w:'20%'} ] } }
+  ]},
+  { id:'m14', title:'Hồ sơ minh chứng', eyebrow:'Module 14', sub:'Kho lưu trữ bằng chứng phát triển: QR Code, Google Drive, Github, video, ảnh, chứng nhận.', cards:[
+    { h:'Danh mục minh chứng', table:{ k:'minhchung', cols:[
+      {k:'ten',l:'Tên minh chứng',t:'text',w:'30%'},
+      {k:'loai',l:'Loại',t:'select',opts:['QR Code','Google Drive','Github','Video','Ảnh','Chứng nhận','Khác'],w:'18%'},
+      {k:'link',l:'Đường dẫn',t:'text',w:'32%'},
+      {k:'gc',l:'Ghi chú',t:'text',w:'20%'} ] } }
+  ]},
+  { id:'m15', title:'Dashboard phát triển', eyebrow:'Module 15', sub:'Một trang tổng quan — nhìn vào là biết ngay em đang mạnh ở đâu và cần bồi đắp điều gì.', cards:[
+    { h:'Bản đồ phát triển của em', special:'dashboard' },
+    { h:'Chu kỳ sử dụng hồ sơ', special:'cycle' }
+  ]}
+]}
+];
+
+/* ---------- MODULE MỞ (kích hoạt khi cần) ---------- */
+var OPTIONAL = [
+  { id:'o_ielts', title:'IELTS', tip:'Có nhu cầu chứng chỉ tiếng Anh', cards:[
+    { h:'Chứng chỉ IELTS', fields:[
+      {t:'text',k:'muctieu',l:'Mục tiêu band',w:'half'},{t:'text',k:'hientai',l:'Band hiện tại',w:'half'},
+      {t:'text',k:'ngaythi',l:'Ngày thi dự kiến',w:'half'},{t:'text',k:'trungtam',l:'Nơi học / luyện',w:'half'},
+      {t:'area',k:'kehoach',l:'Kế hoạch ôn luyện',w:'full'} ]} ]},
+  { id:'o_ngoaingu', title:'HSK / TOPIK / JLPT', tip:'Học ngoại ngữ khác', cards:[
+    { h:'Chứng chỉ ngoại ngữ khác', table:{ k:'rows', cols:[
+      {k:'cc',l:'Chứng chỉ',t:'select',opts:['HSK (Trung)','TOPIK (Hàn)','JLPT (Nhật)','Khác'],w:'22%'},
+      {k:'cap',l:'Cấp độ mục tiêu',t:'text',w:'22%'},{k:'ht',l:'Hiện tại',t:'text',w:'22%'},{k:'gc',l:'Kế hoạch',t:'area',w:'34%'} ] } } ]},
+  { id:'o_sat', title:'SAT / ACT', tip:'Du học hoặc chương trình quốc tế', cards:[
+    { h:'SAT / ACT', fields:[
+      {t:'select',k:'loai',l:'Bài thi',opts:['SAT','ACT'],w:'half'},{t:'text',k:'muctieu',l:'Điểm mục tiêu',w:'half'},
+      {t:'text',k:'hientai',l:'Điểm hiện tại',w:'half'},{t:'text',k:'ngaythi',l:'Ngày thi dự kiến',w:'half'},
+      {t:'area',k:'kehoach',l:'Kế hoạch',w:'full'} ]} ]},
+  { id:'o_dgnl', title:'ĐGNL / HSA / TSA', tip:'Xét tuyển đại học bằng kỳ thi riêng', cards:[
+    { h:'Kỳ thi đánh giá năng lực', table:{ k:'rows', cols:[
+      {k:'ky',l:'Kỳ thi',t:'select',opts:['ĐGNL ĐHQG-HCM','HSA (ĐHQG-HN)','TSA (BKHN)','V-SAT','Khác'],w:'24%'},
+      {k:'mt',l:'Điểm mục tiêu',t:'text',w:'18%'},{k:'tg',l:'Đợt thi',t:'text',w:'18%'},{k:'gc',l:'Ghi chú',t:'area',w:'40%'} ] } } ]},
+  { id:'o_olympic', title:'Olympic / HSG', tip:'Học sinh năng khiếu học thuật', cards:[
+    { h:'Học sinh giỏi & Olympic', table:{ k:'rows', cols:[
+      {k:'mon',l:'Môn',t:'text',w:'20%'},{k:'cap',l:'Cấp',t:'select',opts:['Trường','Tỉnh/TP','Quốc gia','Quốc tế'],w:'18%'},
+      {k:'kq',l:'Kết quả',t:'text',w:'20%'},{k:'nam',l:'Năm',t:'text',w:'14%'},{k:'gc',l:'Ghi chú',t:'area',w:'28%'} ] } } ]},
+  { id:'o_nckh', title:'Nghiên cứu khoa học', tip:'Định hướng nghiên cứu', cards:[
+    { h:'Đề tài nghiên cứu', table:{ k:'rows', cols:[
+      {k:'ten',l:'Tên đề tài',t:'text',w:'28%'},{k:'linhvuc',l:'Lĩnh vực',t:'text',w:'18%'},
+      {k:'vaitro',l:'Vai trò',t:'text',w:'16%'},{k:'kq',l:'Kết quả/Giải',t:'area',w:'38%'} ] } } ]},
+  { id:'o_khoinghiep', title:'Khởi nghiệp', tip:'Có dự án kinh doanh', cards:[
+    { h:'Dự án khởi nghiệp', fields:[
+      {t:'text',k:'ten',l:'Tên dự án',w:'half'},{t:'text',k:'linhvuc',l:'Lĩnh vực',w:'half'},
+      {t:'area',k:'mota',l:'Mô tả ý tưởng & vai trò',w:'full'},{t:'area',k:'ketqua',l:'Kết quả đạt được',w:'full'} ]} ]},
+  { id:'o_nghethuat', title:'Nghệ thuật', tip:'Âm nhạc, mỹ thuật, biểu diễn', cards:[
+    { h:'Thành tích nghệ thuật', table:{ k:'rows', cols:[
+      {k:'linhvuc',l:'Lĩnh vực',t:'select',opts:['Âm nhạc','Mỹ thuật','Biểu diễn','Nhiếp ảnh','Thiết kế','Khác'],w:'20%'},
+      {k:'noidung',l:'Nội dung / tác phẩm',t:'area',w:'34%'},{k:'kq',l:'Thành tích',t:'area',w:'26%'},{k:'mc',l:'Minh chứng',t:'text',w:'20%'} ] } } ]},
+  { id:'o_thethao', title:'Thể thao', tip:'Thành tích thể thao', cards:[
+    { h:'Thành tích thể thao', table:{ k:'rows', cols:[
+      {k:'mon',l:'Môn thể thao',t:'text',w:'24%'},{k:'cap',l:'Cấp',t:'select',opts:['Trường','Tỉnh/TP','Quốc gia','Quốc tế'],w:'18%'},
+      {k:'kq',l:'Thành tích',t:'text',w:'24%'},{k:'nam',l:'Năm',t:'text',w:'14%'},{k:'gc',l:'Ghi chú',t:'text',w:'20%'} ] } } ]},
+  { id:'o_hocnghe', title:'Học nghề', tip:'Theo hướng giáo dục nghề nghiệp', cards:[
+    { h:'Định hướng học nghề', fields:[
+      {t:'text',k:'nghe',l:'Nghề muốn học',w:'half'},{t:'text',k:'truong',l:'Trường nghề dự kiến',w:'half'},
+      {t:'area',k:'lydo',l:'Lý do lựa chọn',w:'full'},{t:'area',k:'lotrinh',l:'Lộ trình & cơ hội việc làm',w:'full'} ]} ]},
+  { id:'o_vieclam', title:'Hồ sơ việc làm', tip:'Đi làm sau THPT', cards:[
+    { h:'Định hướng việc làm', fields:[
+      {t:'area',k:'kynang',l:'Kỹ năng / thế mạnh nghề nghiệp',w:'full'},
+      {t:'area',k:'kinhnghiem',l:'Kinh nghiệm làm thêm / thực tập',w:'full'},
+      {t:'area',k:'muctieu',l:'Vị trí / công việc mong muốn',w:'full'} ]} ]}
+];
+
+var CYCLE = [
+  {t:'Đầu năm',d:'Đánh giá bản thân + đặt mục tiêu'},
+  {t:'Giữa kỳ',d:'Kiểm tra tiến độ'},
+  {t:'Cuối học kỳ',d:'Tự đánh giá + bổ sung minh chứng'},
+  {t:'Cuối năm',d:'Tổng kết + cập nhật Dashboard'}
+];
+
+/* ============================================================
+   ENGINE
+   ============================================================ */
+function $(s,r){return (r||document).querySelector(s);}
+function ce(t,c,h){var e=document.createElement(t);if(c)e.className=c;if(h!=null)e.innerHTML=h;return e;}
+function esc(s){return (s==null?'':String(s)).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function nl2(s){return esc(s).replace(/\n/g,'<br>');}
+
+var ALL_MODULES = [];
+SECTIONS.forEach(function(s){s.modules.forEach(function(m){ALL_MODULES.push(m);});});
+function moduleById(id){
+  var all=ALL_MODULES.concat(OPTIONAL);
+  for(var i=0;i<all.length;i++) if(all[i].id===id) return all[i];
+  return null;
+}
+var current='m1';
+
+/* ---------- State accessors ---------- */
+function fv(mid,key){return (STATE.fields[mid]&&STATE.fields[mid][key])||'';}
+function setF(mid,key,val){ if(!STATE.fields[mid])STATE.fields[mid]={}; STATE.fields[mid][key]=val; scheduleAuto(); }
+function tableData(mid,key){ var id=mid+'.'+key; if(!STATE.tables[id])STATE.tables[id]=[]; return STATE.tables[id]; }
+function setTable(mid,key,arr){ STATE.tables[mid+'.'+key]=arr; scheduleAuto(); }
+
+/* ---------- Assessment compute ---------- */
+function hollandScores(){
+  var out={};HOLLAND_GROUPS.forEach(function(g){
+    var arr=HOLLAND_ITEMS[g.key],sum=0;
+    for(var i=0;i<arr.length;i++){var v=STATE.holland[g.key+'_'+i];sum+=(v?v:0);}
+    out[g.key]={raw:sum,max:arr.length*4,pct:Math.round(sum/(arr.length*4)*100)};
+  });return out;
+}
+function hollandTop(){
+  var s=hollandScores();
+  return HOLLAND_GROUPS.map(function(g){return {key:g.key,name:g.name,pct:s[g.key].pct,raw:s[g.key].raw};})
+    .sort(function(a,b){return b.raw-a.raw;});
+}
+function gardnerScores(){
+  var out={};GARDNER_TYPES.forEach(function(g){
+    var arr=GARDNER_ITEMS[g.key],sum=0;
+    for(var i=0;i<arr.length;i++){var v=STATE.gardner[g.key+'_'+i];sum+=(v?v:0);}
+    out[g.key]={raw:sum,max:arr.length*4,pct:Math.round(sum/(arr.length*4)*100)};
+  });return out;
+}
+function gardnerTop(){
+  var s=gardnerScores();
+  return GARDNER_TYPES.map(function(g){return {key:g.key,name:g.name,pct:s[g.key].pct,raw:s[g.key].raw};})
+    .sort(function(a,b){return b.raw-a.raw;});
+}
+
+/* ---------- Completion / progress ---------- */
+function moduleFilled(m){
+  // returns true if module has meaningful data
+  if(m.id==='m2'){
+    var h=Object.keys(STATE.holland).length>0, g=Object.keys(STATE.gardner).length>0;
+    return h||g||anyField(m);
+  }
+  if(m.id==='m15') return false; // dashboard auto
+  if(anyField(m)) return true;
+  // any table row with content
+  var has=false;
+  m.cards.forEach(function(c){ if(c.table){ var d=tableData(m.id,c.table.k);
+    d.forEach(function(r){ for(var k in r){ if(r[k]&&String(r[k]).trim()){has=true;} } }); } });
+  return has;
+}
+function anyField(m){
+  var f=STATE.fields[m.id]; if(!f) return false;
+  for(var k in f){ if(f[k]&&String(f[k]).trim()) return true; } return false;
+}
+function progress(){
+  var core=ALL_MODULES.filter(function(m){return m.id!=='m15';});
+  var done=0; core.forEach(function(m){ if(moduleFilled(m)) done++; });
+  // count assessments as bonus weight handled by m2
+  return Math.round(done/core.length*100);
+}
+function updateProgress(){
+  var p=progress();
+  $('#progBar').style.width=p+'%';
+  $('#progPct').textContent=p+'%';
+}
+
+/* ============================================================
+   RENDER — SIDEBAR
+   ============================================================ */
+function renderNav(){
+  var nav=$('#nav'); nav.innerHTML='';
+  SECTIONS.forEach(function(sec){
+    var p=ce('div','nav-part');
+    p.appendChild(ce('div','part-h','<span class="pn">'+sec.pn+'</span> Phần '+sec.pn+'. '+sec.part));
+    sec.modules.forEach(function(m){
+      var b=ce('button','nav-item'+(m.id===current?' active':'')+(moduleFilled(m)?' done':''));
+      b.innerHTML='<span class="dot"></span>'+m.title;
+      b.onclick=function(){go(m.id);};
+      p.appendChild(b);
+    });
+    nav.appendChild(p);
+  });
+  // optional modules
+  var oh=ce('div','opt-head','＋ Module mở (kích hoạt khi cần)');
+  nav.appendChild(oh);
+  OPTIONAL.forEach(function(m){
+    if(!STATE.opened[m.id]) return;
+    var b=ce('button','nav-item'+(m.id===current?' active':'')+(moduleFilled(m)?' done':''));
+    b.innerHTML='<span class="dot"></span>'+m.title;
+    b.onclick=function(){go(m.id);};
+    nav.appendChild(b);
+  });
+  var add=ce('button','nav-item','<span class="dot" style="background:var(--amber)"></span><span style="color:var(--amber);font-weight:700">Quản lý module mở…</span>');
+  add.onclick=function(){go('optmgr');};
+  nav.appendChild(add);
+  updateProgress();
+}
+
+/* ============================================================
+   RENDER — FIELD & TABLE
+   ============================================================ */
+function fieldEl(mid,f){
+  var wrap=ce('div','field');
+  if(f.w==='full') wrap.style.gridColumn='1 / -1';
+  var lab='<label>'+esc(f.l)+(f.d?' <span class="desc">— '+esc(f.d)+'</span>':'')+'</label>';
+  var val=fv(mid,f.k);
+  var el;
+  if(f.t==='area'){ el='<textarea data-k="'+f.k+'" placeholder="'+esc(f.ph||'')+'">'+esc(val)+'</textarea>'; }
+  else if(f.t==='select'){
+    var o='<option value="">— Chọn —</option>';
+    f.opts.forEach(function(op){o+='<option'+(op===val?' selected':'')+'>'+esc(op)+'</option>';});
+    el='<select data-k="'+f.k+'">'+o+'</select>';
+  } else {
+    var type=f.t==='date'?'date':(f.t==='num'?'number':'text');
+    el='<input type="'+type+'" data-k="'+f.k+'" value="'+esc(val)+'" placeholder="'+esc(f.ph||'')+'">';
+  }
+  wrap.innerHTML=lab+el;
+  var input=wrap.querySelector('[data-k]');
+  input.addEventListener('input',function(){ setF(mid,f.k,this.value); markNav(); });
+  input.addEventListener('change',function(){ setF(mid,f.k,this.value); });
+  return wrap;
+}
+
+function tableEl(mid,tb){
+  var wrap=ce('div','rep');
+  var tbl=ce('table');
+  var thead=ce('thead'); var tr=ce('tr');
+  tb.cols.forEach(function(c){ var th=ce('th',null,esc(c.l)); if(c.w)th.style.width=c.w; tr.appendChild(th); });
+  if(!tb.fixed) tr.appendChild(ce('th','del',''));
+  thead.appendChild(tr); tbl.appendChild(thead);
+  var tbody=ce('tbody'); tbl.appendChild(tbody);
+  wrap.appendChild(tbl);
+
+  // ensure default rows
+  var data=tableData(mid,tb.k);
+  if(data.length===0 && tb.defaultRows){
+    tb.defaultRows.forEach(function(r){ var row={}; for(var k in r) row[k]=r[k]; data.push(row); });
+    setTable(mid,tb.k,data);
+  }
+  if(data.length===0 && !tb.fixed){ data.push({}); setTable(mid,tb.k,data); }
+
+  function drawBody(){
+    tbody.innerHTML='';
+    data.forEach(function(row,ri){
+      var rtr=ce('tr');
+      tb.cols.forEach(function(c){
+        var td=ce('td'); var v=row[c.k]||'';
+        if(c.fixed||(tb.fixed&&c.t==='text'&&c.k===tb.cols[0].k)){
+          // first column of fixed tables = label, read-only
+          td.innerHTML='<div style="font-weight:600;color:var(--navy);font-size:13px;padding:7px 4px">'+esc(v)+'</div>';
+        } else if(c.t==='area'){
+          td.innerHTML='<textarea data-c="'+c.k+'">'+esc(v)+'</textarea>';
+        } else if(c.t==='select'){
+          var o='<option value="">—</option>'; c.opts.forEach(function(op){o+='<option'+(op===v?' selected':'')+'>'+esc(op)+'</option>';});
+          td.innerHTML='<select data-c="'+c.k+'">'+o+'</select>';
+        } else {
+          td.innerHTML='<input type="text" data-c="'+c.k+'" value="'+esc(v)+'">';
+        }
+        var inp=td.querySelector('[data-c]');
+        if(inp){ inp.addEventListener('input',function(){ row[this.getAttribute('data-c')]=this.value; scheduleAuto(); markNav(); });
+                 inp.addEventListener('change',function(){ row[this.getAttribute('data-c')]=this.value; }); }
+        rtr.appendChild(td);
+      });
+      if(!tb.fixed){
+        var dtd=ce('td','del'); var db=ce('button','rowdel','×'); db.title='Xóa dòng';
+        db.onclick=function(){ data.splice(ri,1); if(data.length===0)data.push({}); setTable(mid,tb.k,data); drawBody(); markNav(); };
+        dtd.appendChild(db); rtr.appendChild(dtd);
+      }
+      tbody.appendChild(rtr);
+    });
+  }
+  drawBody();
+  if(!tb.fixed){
+    var add=ce('button','addrow','＋ Thêm dòng');
+    add.onclick=function(){ data.push({}); setTable(mid,tb.k,data); drawBody(); };
+    wrap.appendChild(add);
+  }
+  return wrap;
+}
+
+/* ============================================================
+   RENDER — HOLLAND
+   ============================================================ */
+function hollandEl(){
+  var box=ce('div');
+  box.appendChild(ce('p','hint','Đọc từng phát biểu và chọn mức độ đúng với em: 0 = Không đúng · 4 = Rất đúng. Hãy trả lời thật lòng, không có đáp án đúng/sai.'));
+  HOLLAND_GROUPS.forEach(function(g){
+    var grp=ce('div'); grp.style.marginBottom='14px';
+    grp.appendChild(ce('div',null,'<div style="font-size:13px;font-weight:700;color:var(--navy);margin:6px 0 2px">'+esc(g.name)+' <span style="color:var(--muted);font-weight:500;font-size:11.5px">('+esc(g.en)+')</span></div><div style="font-size:11.5px;color:var(--muted);margin-bottom:4px">'+esc(g.desc)+'</div>'));
+    HOLLAND_ITEMS[g.key].forEach(function(q,i){
+      var key=g.key+'_'+i; var cur=STATE.holland[key];
+      var row=ce('div','assess-q');
+      row.appendChild(ce('div','qt',esc(q)));
+      var sc=ce('div','scale');
+      for(var n=0;n<=4;n++){(function(n){
+        var b=ce('button',cur===n?'on':null,String(n));
+        b.onclick=function(){ STATE.holland[key]=n; Array.prototype.forEach.call(sc.children,function(c){c.classList.remove('on');}); b.classList.add('on'); drawHollandResult(); scheduleAuto(); markNav(); };
+        sc.appendChild(b);
+      })(n);}
+      row.appendChild(sc); grp.appendChild(row);
+    });
+    box.appendChild(grp);
+  });
+  var res=ce('div'); res.id='hollandResult'; box.appendChild(res);
+  setTimeout(drawHollandResult,0);
+  return box;
+}
+function drawHollandResult(){
+  var el=document.getElementById('hollandResult'); if(!el) return;
+  var top=hollandTop(); var any=top.some(function(t){return t.raw>0;});
+  if(!any){ el.innerHTML='<div class="callout" style="margin-top:14px"><span class="ic">🧭</span><div>Hoàn thành bảng trên để xem <b>mã Holland</b> và nhóm sở thích nổi bật của em.</div></div>'; return; }
+  var bars=top.map(function(t){
+    return '<div class="barline"><div class="nm">'+esc(t.name)+'</div><div class="tr"><div class="fl" style="width:'+t.pct+'%"></div></div><div class="vv">'+t.pct+'%</div></div>';
+  }).join('');
+  var code=top.slice(0,3).map(function(t){return t.key;}).join('');
+  el.innerHTML='<div class="result-card"><h3>Kết quả Holland của em</h3><div class="bars">'+bars+'</div>'+
+    '<div class="code-pill"><span>'+code.split('').join(' &nbsp; ')+'</span></div>'+
+    '<div class="top-note">Nhóm nổi bật: <b style="color:#fff">'+top.slice(0,3).map(function(t){return t.name;}).join(' · ')+'</b>. Hãy ưu tiên khám phá những nghề/ngành thuộc các nhóm này.</div></div>';
+}
+
+/* ============================================================
+   RENDER — GARDNER
+   ============================================================ */
+function gardnerEl(){
+  var box=ce('div');
+  box.appendChild(ce('p','hint','Mỗi loại trí thông minh có 4 phát biểu. Chọn mức: 0 = Không giống em · 4 = Rất giống em.'));
+  GARDNER_TYPES.forEach(function(g){
+    var grp=ce('div'); grp.style.marginBottom='12px';
+    grp.appendChild(ce('div',null,'<div style="font-size:13px;font-weight:700;color:var(--navy);margin:6px 0 1px">'+esc(g.name)+'</div><div style="font-size:11.5px;color:var(--muted);margin-bottom:3px">'+esc(g.desc)+'</div>'));
+    GARDNER_ITEMS[g.key].forEach(function(q,i){
+      var key=g.key+'_'+i; var cur=STATE.gardner[key];
+      var row=ce('div','assess-q');
+      row.appendChild(ce('div','qt',esc(q)));
+      var sc=ce('div','scale');
+      for(var n=0;n<=4;n++){(function(n){
+        var b=ce('button',cur===n?'on':null,String(n));
+        b.onclick=function(){ STATE.gardner[key]=n; Array.prototype.forEach.call(sc.children,function(c){c.classList.remove('on');}); b.classList.add('on'); drawGardnerResult(); scheduleAuto(); markNav(); };
+        sc.appendChild(b);
+      })(n);}
+      row.appendChild(sc); grp.appendChild(row);
+    });
+    box.appendChild(grp);
+  });
+  var res=ce('div'); res.id='gardnerResult'; box.appendChild(res);
+  setTimeout(drawGardnerResult,0);
+  return box;
+}
+function drawGardnerResult(){
+  var el=document.getElementById('gardnerResult'); if(!el) return;
+  var top=gardnerTop(); var any=top.some(function(t){return t.raw>0;});
+  if(!any){ el.innerHTML='<div class="callout" style="margin-top:14px"><span class="ic">💡</span><div>Hoàn thành bảng trên để khám phá <b>trí thông minh nổi trội</b> của em.</div></div>'; return; }
+  var bars=top.map(function(t){
+    return '<div class="barline"><div class="nm">'+esc(t.name)+'</div><div class="tr"><div class="fl" style="width:'+t.pct+'%"></div></div><div class="vv">'+t.pct+'%</div></div>';
+  }).join('');
+  el.innerHTML='<div class="result-card"><h3>Trí thông minh nổi trội của em</h3><div class="bars">'+bars+'</div>'+
+    '<div class="top-note">Top 3: <b style="color:#fff">'+top.slice(0,3).map(function(t){return t.name;}).join(' · ')+'</b>. Đây là những "thế mạnh tự nhiên" em nên tận dụng khi học tập và chọn nghề.</div></div>';
+}
+
+/* ============================================================
+   RENDER — DASHBOARD
+   ============================================================ */
+function starStr(n){ // n: 0..5
+  n=Math.max(0,Math.min(5,Math.round(n)));
+  var s=''; for(var i=0;i<5;i++) s+= i<n?'★':'<span class="e">★</span>'; return s;
+}
+function dashMetrics(){
+  // Năng lực: trung bình mức M3
+  var nl=tableData('m3','nangluc'); var sum=0,cnt=0;
+  nl.forEach(function(r){ if(r.muc){ sum+=parseInt(r.muc,10); cnt++; } });
+  var mNL = cnt? (sum/cnt) : 0; // 1..5
+  // Phẩm chất: số phẩm chất có minh chứng / 5 *5
+  var pc=tableData('m4','phamchat'); var pcd=0; pc.forEach(function(r){ if(r.mc&&r.mc.trim())pcd++; });
+  var mPC = pcd/5*5;
+  // Học tập: dựa trên việc điền M5 (tổng quan + số học kỳ)
+  var ht=0; var f5=STATE.fields['m5']||{}; ['monmanh','moncaithien','kehoach_hoc'].forEach(function(k){if(f5[k]&&f5[k].trim())ht++;});
+  var hk=tableData('m5','hocky').filter(function(r){return r.hk&&r.hk.trim();}).length;
+  var mHT = Math.min(5, ht + Math.min(2,hk));
+  // Trải nghiệm: số mục M6+M7+M8
+  var tn=0;
+  ['trainghiem','duan','thanhtich'].forEach(function(k){ var mid=k==='trainghiem'?'m6':(k==='duan'?'m7':'m8');
+    tableData(mid,k).forEach(function(r){ for(var x in r){ if(r[x]&&String(r[x]).trim()){tn++;break;} } }); });
+  var mTN = Math.min(5, tn);
+  // Nghề nghiệp: số mục M9-M11 + kế hoạch M12
+  var ngc=0;
+  [['m9','nghe'],['m10','nganh'],['m11','truong']].forEach(function(p){
+    tableData(p[0],p[1]).forEach(function(r){ for(var x in r){ if(r[x]&&String(r[x]).trim()){ngc++;break;} } }); });
+  var f12=STATE.fields['m12']||{}; ['smart1','smart3','smart5'].forEach(function(k){if(f12[k]&&f12[k].trim())ngc++;});
+  var mNN = Math.min(5, ngc);
+  return [
+    {label:'Năng lực', val:mNL, note: cnt? 'Trung bình '+(mNL).toFixed(1)+'/5 trên '+cnt+' năng lực' : 'Chưa đánh giá năng lực'},
+    {label:'Phẩm chất', val:mPC, note: pcd+'/5 phẩm chất đã có minh chứng'},
+    {label:'Học tập', val:mHT, note:'Thông tin học tập & '+hk+' học kỳ đã ghi'},
+    {label:'Trải nghiệm', val:mTN, note: tn+' hoạt động · dự án · thành tích'},
+    {label:'Nghề nghiệp', val:mNN, note: ngc+' mục định hướng đã khám phá'}
+  ];
+}
+function dashboardEl(){
+  var box=ce('div');
+  var grid=ce('div','dash-grid');
+  dashMetrics().forEach(function(m){
+    var it=ce('div','dash-item');
+    it.innerHTML='<div class="dl">'+esc(m.label)+'</div><div class="stars">'+starStr(m.val)+'</div><div class="dnote">'+esc(m.note)+'</div>';
+    grid.appendChild(it);
+  });
+  box.appendChild(grid);
+  // insight
+  var ms=dashMetrics(); var weak=ms.slice().sort(function(a,b){return a.val-b.val;})[0];
+  var strong=ms.slice().sort(function(a,b){return b.val-a.val;})[0];
+  var ins=ce('div','callout'); ins.style.marginTop='14px';
+  ins.innerHTML='<span class="ic">🎯</span><div>Điểm mạnh hiện tại của em là <b>'+esc(strong.label)+'</b>. Khu vực nên đầu tư thêm trong giai đoạn tới là <b>'+esc(weak.label)+'</b> — hãy đặt 1 mục tiêu nhỏ để cải thiện nó ngay học kỳ này.</div>';
+  box.appendChild(ins);
+  return box;
+}
+function cycleEl(){
+  var box=ce('div');
+  var g=ce('div','cycle');
+  CYCLE.forEach(function(c){ g.appendChild(ce('div','c','<div class="t">'+esc(c.t)+'</div><div class="d">'+esc(c.d)+'</div>')); });
+  box.appendChild(g);
+  box.appendChild(ce('p','hint','Hồ sơ này không phải làm một lần rồi cất đi — mà là công cụ quản trị sự phát triển, cập nhật theo chu kỳ suốt cấp THPT.'));
+  return box;
+}
+
+/* ============================================================
+   RENDER — MODULE PAGE
+   ============================================================ */
+function go(id){
+  current=id;
+  if(window.innerWidth<=880){ $('#sidebar').classList.remove('open'); }
+  renderNav();
+  renderMain();
+  $('#main').scrollIntoView({behavior:'auto',block:'start'});
+  window.scrollTo(0,0);
+}
+function markNav(){
+  // update done dots + progress without full re-render
+  var items=$('#nav').querySelectorAll('.nav-item');
+  renderNav();
+}
+function cardEl(m,c){
+  var card=ce('div','card');
+  var head='<h3>'+esc(c.h)+(c.tag?'<span class="tag">'+esc(c.tag)+'</span>':'')+'</h3>';
+  card.innerHTML=head+(c.hint?'<p class="hint">'+esc(c.hint)+'</p>':'');
+  if(c.special==='holland'){ card.appendChild(hollandEl()); }
+  else if(c.special==='gardner'){ card.appendChild(gardnerEl()); }
+  else if(c.special==='dashboard'){ card.appendChild(dashboardEl()); }
+  else if(c.special==='cycle'){ card.appendChild(cycleEl()); }
+  else if(c.table){ card.appendChild(tableEl(m.id,c.table)); }
+  else if(c.fields){
+    var g=ce('div','grid c2'); c.fields.forEach(function(f){ g.appendChild(fieldEl(m.id,f)); });
+    card.appendChild(g);
+  }
+  return card;
+}
+function renderMain(){
+  var main=$('#main'); main.innerHTML='';
+  if(current==='optmgr'){ renderOptMgr(); return; }
+  var m=moduleById(current); if(!m){ go('m1'); return; }
+  var head=ce('div','page-head');
+  head.innerHTML='<div class="eyebrow">'+esc(m.eyebrow||'Module mở')+'</div><h2>'+esc(m.title)+'</h2>'+(m.sub?'<div class="sub">'+esc(m.sub)+'</div>':'');
+  main.appendChild(head);
+  m.cards.forEach(function(c){ main.appendChild(cardEl(m,c)); });
+
+  // nav buttons
+  var idx=ALL_MODULES.findIndex(function(x){return x.id===m.id;});
+  if(idx>=0){
+    var foot=ce('div','module-foot');
+    var prev=idx>0?ALL_MODULES[idx-1]:null;
+    var next=idx<ALL_MODULES.length-1?ALL_MODULES[idx+1]:null;
+    foot.innerHTML='<div>'+(prev?'<button class="ghost" data-go="'+prev.id+'">← '+esc(prev.title)+'</button>':'')+'</div>'+
+                   '<div>'+(next?'<button class="primary" data-go="'+next.id+'">'+esc(next.title)+' →</button>':'<button class="primary" id="finishBtn">Hoàn tất · Xuất PDF →</button>')+'</div>';
+    main.appendChild(foot);
+    foot.querySelectorAll('[data-go]').forEach(function(b){ b.onclick=function(){go(this.getAttribute('data-go'));}; });
+    var fb=document.getElementById('finishBtn'); if(fb) fb.onclick=exportPDF;
+  }
+}
+
+/* ============================================================
+   OPTIONAL MODULE MANAGER
+   ============================================================ */
+function renderOptMgr(){
+  var main=$('#main');
+  var head=ce('div','page-head');
+  head.innerHTML='<div class="eyebrow">Tùy chỉnh</div><h2>Module mở</h2><div class="sub">Hồ sơ không ép mọi học sinh đi theo một con đường. Hãy bật những module phù hợp với định hướng riêng của em.</div>';
+  main.appendChild(head);
+  var card=ce('div','card');
+  card.innerHTML='<h3>Kích hoạt module theo nhu cầu</h3><p class="hint">Module được bật sẽ hiện trong thanh điều hướng bên trái.</p>';
+  var grid=ce('div','grid c2');
+  OPTIONAL.forEach(function(m){
+    var on=!!STATE.opened[m.id];
+    var it=ce('div',null);
+    it.style.cssText='border:1px solid var(--line);border-radius:12px;padding:13px 15px;display:flex;align-items:center;gap:12px;'+(on?'background:var(--amber-soft);border-color:#f3dca0':'background:#fff');
+    it.innerHTML='<div style="flex:1"><div style="font-weight:700;color:var(--navy);font-size:13.5px">'+esc(m.title)+'</div><div style="font-size:11.5px;color:var(--muted)">'+esc(m.tip)+'</div></div>';
+    var btn=ce('button',on?'primary':'ghost',on?'Đang bật ✓':'Bật');
+    btn.onclick=function(){ STATE.opened[m.id]=!on; scheduleAuto(); renderNav(); renderOptMgr2(); };
+    it.appendChild(btn); grid.appendChild(it);
+  });
+  card.appendChild(grid); main.appendChild(card);
+}
+function renderOptMgr2(){ $('#main').innerHTML=''; renderOptMgr(); }
+
+/* ============================================================
+   PERSISTENCE
+   ============================================================ */
+var LSKEY='hna_hoso_v1';
+function toast(msg,ok){ var t=$('#toast'); t.textContent=msg; t.className='toast show'+(ok?' ok':''); setTimeout(function(){t.className='toast';},2200); }
+var autoT=null;
+function scheduleAuto(){ clearTimeout(autoT); autoT=setTimeout(function(){ saveLocal(true); updateProgress(); },800); }
+function saveLocal(silent){
+  try{ localStorage.setItem(LSKEY,JSON.stringify(STATE)); if(!silent)toast('Đã lưu vào trình duyệt',true); }
+  catch(e){ if(!silent)toast('Trình duyệt không cho lưu — hãy dùng nút Sao lưu'); }
+}
+function loadLocal(){
+  try{ var s=localStorage.getItem(LSKEY); if(s){ var d=JSON.parse(s); mergeState(d); return true; } }catch(e){}
+  return false;
+}
+function mergeState(d){
+  if(!d) return;
+  STATE.fields=d.fields||{}; STATE.tables=d.tables||{}; STATE.holland=d.holland||{}; STATE.gardner=d.gardner||{}; STATE.opened=d.opened||{};
+}
+function exportJSON(){
+  var blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});
+  var name=(fv('m1','hoten')||'hoso').trim().replace(/\s+/g,'_');
+  var a=ce('a'); a.href=URL.createObjectURL(blob); a.download='HoSo_HNA_'+name+'.json'; a.click();
+  setTimeout(function(){URL.revokeObjectURL(a.href);},500);
+  toast('Đã tải file sao lưu (.json)',true);
+}
+function importJSON(file){
+  var r=new FileReader();
+  r.onload=function(){ try{ var d=JSON.parse(r.result); mergeState(d); saveLocal(true); go(current); toast('Đã khôi phục dữ liệu',true); }
+    catch(e){ toast('File không hợp lệ'); } };
+  r.readAsText(file);
+}
+
+/* ============================================================
+   PDF EXPORT
+   ============================================================ */
+function pHeaderHTML(){
+  return '<div class="ph"><div class="lg">A</div><div><div class="ht">Hồ sơ Phát triển Năng lực &amp; Định hướng Nghề nghiệp THPT</div><div class="hs">Hướng Nghiệp Alpha · Biến ước mơ thành sự nghiệp</div></div></div>';
+}
+function pFooterHTML(pageNo){
+  return '<div class="pf"><b>Hướng Nghiệp Alpha</b> | Hotline: 096 937 4411 | Email: huongnghiepalpha@gmail.com | www.huongnghiepalpha.vn<br>Trang '+pageNo+'</div>';
+}
+function bSection(t){ return '<div class="pdf-sec">'+esc(t)+'</div>'; }
+function bSubH(t){ return '<div class="pdf-sub-h">'+esc(t)+'</div>'; }
+function bText(label,val){ if(!val||!String(val).trim())return ''; return '<div class="pdf-sub-h">'+esc(label)+'</div><div class="pdf-text">'+nl2(val)+'</div>'; }
+function bKV(pairs){ // pairs: [[k,v],...]
+  var rows=pairs.filter(function(p){return p[1]&&String(p[1]).trim();})
+    .map(function(p){return '<div class="pdf-kv"><div class="k">'+esc(p[0])+'</div><div class="v">'+nl2(p[1])+'</div></div>';}).join('');
+  return rows;
+}
+function bBars(items){ // items: [{name,pct}]
+  return items.map(function(it){return '<div class="pdf-bar"><div class="n">'+esc(it.name)+'</div><div class="t"><div class="f" style="width:'+it.pct+'%"></div></div><div class="vv">'+it.pct+'%</div></div>';}).join('');
+}
+// table → array of block HTML (chunked), each ≤ CH rows, repeats header
+function bTableBlocks(cols,rows,title){
+  rows=rows.filter(function(r){ for(var k in r){ if(r[k]&&String(r[k]).trim())return true;} return false; });
+  if(rows.length===0) return [];
+  var CH=8, out=[];
+  for(var i=0;i<rows.length;i+=CH){
+    var chunk=rows.slice(i,i+CH);
+    var th=cols.map(function(c){return '<th'+(c.w?' style="width:'+c.w+'"':'')+'>'+esc(c.l)+'</th>';}).join('');
+    var body=chunk.map(function(r){
+      return '<tr>'+cols.map(function(c){return '<td>'+nl2(r[c.k]||'')+'</td>';}).join('')+'</tr>';
+    }).join('');
+    var cap=(title&&i===0)?'':''; // title handled outside
+    out.push('<table class="pdf-tbl"><thead><tr>'+th+'</tr></thead><tbody>'+body+'</tbody></table>');
+  }
+  return out;
+}
+
+function buildCover(){
+  var name=fv('m1','hoten')||'……………………………';
+  var meta=[];
+  if(fv('m1','lop'))meta.push('Lớp '+fv('m1','lop'));
+  if(fv('m1','truong'))meta.push(fv('m1','truong'));
+  if(fv('m1','namhoc'))meta.push('Năm học '+fv('m1','namhoc'));
+  var page=ce('div','pdf-page');
+  page.innerHTML='<div class="pdf-cover">'+
+    '<div class="cv-lg">A</div>'+
+    '<div class="cv-org">Hướng Nghiệp Alpha</div>'+
+    '<div class="cv-tl">Hồ sơ Phát triển Năng lực &amp; Định hướng Nghề nghiệp</div>'+
+    '<div class="cv-dv"></div>'+
+    '<div class="cv-sub">Công cụ hỗ trợ học sinh THPT tự nhận thức, phát triển năng lực, xây dựng kế hoạch học tập và định hướng nghề nghiệp theo Chương trình Giáo dục phổ thông 2018.</div>'+
+    '<div class="cv-name">'+esc(name)+'</div>'+
+    (meta.length?'<div class="cv-meta">'+esc(meta.join(' · '))+'</div>':'')+
+    '<div class="cv-tag">"Biến ước mơ thành sự nghiệp"</div>'+
+    '</div>'+
+    '<div class="pf" style="background:#142768">Hướng Nghiệp Alpha | Hotline: 096 937 4411 | huongnghiepalpha@gmail.com | www.huongnghiepalpha.vn</div>';
+  return page;
+}
+
+// Build content blocks (array of HTML strings)
+function buildContentBlocks(){
+  var B=[];
+  function push(h){ if(h&&h.trim()) B.push(h); }
+
+  /* PHẦN I */
+  push(bSection('Phần I — Nhận diện bản thân'));
+  // M1
+  push(bSubH('1. Hồ sơ cá nhân'));
+  push(bKV([
+    ['Họ và tên',fv('m1','hoten')],['Ngày sinh',fv('m1','ngaysinh')],['Giới tính',fv('m1','gioitinh')],
+    ['Trường',fv('m1','truong')],['Lớp',fv('m1','lop')],['Năm học',fv('m1','namhoc')],
+    ['Địa chỉ',fv('m1','diachi')],['Điện thoại',fv('m1','sdt')],['Email',fv('m1','email')],
+    ['Cha',[fv('m1','bo_ten'),fv('m1','bo_nghe')].filter(Boolean).join(' — ')],
+    ['Mẹ',[fv('m1','me_ten'),fv('m1','me_nghe')].filter(Boolean).join(' — ')]
+  ]));
+  push(bText('Điều kiện học tập',fv('m1','dieukien')));
+  push(bText('Kỳ vọng của gia đình',fv('m1','hotro_gd')));
+  push(bText('Ước mơ ban đầu',fv('m1','uocmo')));
+  push(bText('Người truyền cảm hứng',fv('m1','thantuong')));
+  // M2
+  push(bSubH('2. Khám phá bản thân — Hiểu mình'));
+  var ht=hollandTop(); if(ht.some(function(x){return x.raw>0;})){
+    push('<div class="pdf-text" style="margin-bottom:4px"><b>Trắc nghiệm sở thích Holland (RIASEC)</b> — Mã Holland: <b style="color:#1d3690">'+ht.slice(0,3).map(function(t){return t.key;}).join('')+'</b> · Nhóm nổi bật: '+ht.slice(0,3).map(function(t){return t.name;}).join(', ')+'</div>');
+    push(bBars(ht));
+  }
+  var gt=gardnerTop(); if(gt.some(function(x){return x.raw>0;})){
+    push('<div class="pdf-text" style="margin:8px 0 4px"><b>9 loại hình trí thông minh (Gardner)</b> — Top 3: '+gt.slice(0,3).map(function(t){return t.name;}).join(', ')+'</div>');
+    push(bBars(gt));
+  }
+  push(bText('Giá trị sống',fv('m2','giatri')));
+  push(bKV([['Sở thích',fv('m2','sothich')],['Điểm mạnh',fv('m2','diemmanh')],['Điểm cần cải thiện',fv('m2','caithien')],['Phong cách học',fv('m2','phongcach')],['Động lực',fv('m2','dongluc')]]));
+  // M3
+  var nlRows=tableData('m3','nangluc');
+  if(nlRows.some(function(r){return r.muc||r.mc||r.kh;})){
+    push(bSubH('3. Hồ sơ năng lực (CTGDPT 2018)'));
+    bTableBlocks([{k:'nl',l:'Năng lực',w:'24%'},{k:'muc',l:'Mức',w:'10%'},{k:'mc',l:'Minh chứng',w:'33%'},{k:'kh',l:'Kế hoạch',w:'33%'}],nlRows).forEach(push);
+  }
+  // M4
+  var pcRows=tableData('m4','phamchat');
+  if(pcRows.some(function(r){return r.mc;})){
+    push(bSubH('4. Hồ sơ phẩm chất'));
+    bTableBlocks([{k:'pc',l:'Phẩm chất',w:'22%'},{k:'mc',l:'Minh chứng',w:'58%'},{k:'tg',l:'Thời điểm',w:'20%'}],pcRows).forEach(push);
+  }
+
+  /* PHẦN II */
+  push(bSection('Phần II — Phát triển năng lực'));
+  push(bSubH('5. Học tập'));
+  push(bKV([['Học lực / GPA',fv('m5','hocluc')],['Hạnh kiểm',fv('m5','hanhkiem')]]));
+  push(bText('Môn mạnh',fv('m5','monmanh'))); push(bText('Môn cần cải thiện',fv('m5','moncaithien'))); push(bText('Kế hoạch học tập',fv('m5','kehoach_hoc')));
+  bTableBlocks([{k:'hk',l:'Học kỳ',w:'18%'},{k:'dtb',l:'Điểm TB',w:'14%'},{k:'noibat',l:'Môn nổi bật',w:'24%'},{k:'tienbo',l:'Tiến bộ / Nhận xét',w:'44%'}],tableData('m5','hocky')).forEach(push);
+  var t6=bTableBlocks([{k:'ten',l:'Hoạt động',w:'20%'},{k:'vaitro',l:'Vai trò',w:'15%'},{k:'ketqua',l:'Kết quả',w:'22%'},{k:'baihoc',l:'Điều học được',w:'25%'},{k:'mc',l:'Minh chứng',w:'18%'}],tableData('m6','trainghiem'));
+  if(t6.length){ push(bSubH('6. Trải nghiệm')); t6.forEach(push); }
+  var t7=bTableBlocks([{k:'ten',l:'Dự án',w:'20%'},{k:'loai',l:'Loại',w:'14%'},{k:'mota',l:'Mô tả',w:'30%'},{k:'ketqua',l:'Kết quả',w:'22%'},{k:'link',l:'Link',w:'14%'}],tableData('m7','duan'));
+  if(t7.length){ push(bSubH('7. Dự án')); t7.forEach(push); }
+  var t8=bTableBlocks([{k:'ten',l:'Thành tích',w:'32%'},{k:'loai',l:'Loại',w:'16%'},{k:'capdo',l:'Cấp độ',w:'16%'},{k:'tg',l:'Thời gian',w:'16%'},{k:'mc',l:'Minh chứng',w:'20%'}],tableData('m8','thanhtich'));
+  if(t8.length){ push(bSubH('8. Thành tích')); t8.forEach(push); }
+
+  /* PHẦN III */
+  push(bSection('Phần III — Định hướng nghề nghiệp'));
+  var t9=bTableBlocks([{k:'nghe',l:'Nghề',w:'16%'},{k:'lydo',l:'Lý do',w:'21%'},{k:'yeucau',l:'Yêu cầu nghề',w:'21%'},{k:'phuhop',l:'Điểm phù hợp',w:'21%'},{k:'phattrien',l:'Cần phát triển',w:'21%'}],tableData('m9','nghe'));
+  if(t9.length){ push(bSubH('9. Khám phá nghề')); t9.forEach(push); }
+  var t10=bTableBlocks([{k:'nganh',l:'Ngành',w:'16%'},{k:'mon',l:'Tổ hợp/môn',w:'20%'},{k:'lotrinh',l:'Lộ trình',w:'22%'},{k:'vieclam',l:'Việc làm',w:'21%'},{k:'xuhuong',l:'Xu hướng',w:'21%'}],tableData('m10','nganh'));
+  if(t10.length){ push(bSubH('10. Khám phá ngành')); t10.forEach(push); }
+  var t11=bTableBlocks([{k:'truong',l:'Trường / Cơ sở',w:'24%'},{k:'bac',l:'Bậc',w:'16%'},{k:'nganh',l:'Ngành',w:'20%'},{k:'pt',l:'Phương thức',w:'22%'},{k:'gc',l:'Điểm chuẩn / GC',w:'18%'}],tableData('m11','truong'));
+  if(t11.length){ push(bSubH('11. Khám phá trường')); t11.forEach(push); }
+  if(fv('m12','smart1')||fv('m12','smart3')||fv('m12','smart5')||fv('m12','camket')){
+    push(bSubH('12. Kế hoạch nghề nghiệp (SMART)'));
+    push(bText('Mục tiêu 1 năm',fv('m12','smart1'))); push(bText('Mục tiêu 3 năm',fv('m12','smart3'))); push(bText('Mục tiêu 5 năm',fv('m12','smart5')));
+    push(bText('Cam kết với chính mình',fv('m12','camket')));
+  }
+
+  /* PHẦN IV */
+  push(bSection('Phần IV — Hành trình phát triển'));
+  var t13=bTableBlocks([{k:'hk',l:'Mốc',w:'16%'},{k:'tuhao',l:'Điều tự hào',w:'22%'},{k:'thatbai',l:'Chưa thành công',w:'21%'},{k:'baihoc',l:'Bài học',w:'21%'},{k:'muctieu',l:'Mục tiêu mới',w:'20%'}],tableData('m13','nhatky'));
+  if(t13.length){ push(bSubH('13. Nhật ký phát triển')); t13.forEach(push); }
+  var t14=bTableBlocks([{k:'ten',l:'Minh chứng',w:'30%'},{k:'loai',l:'Loại',w:'18%'},{k:'link',l:'Đường dẫn',w:'32%'},{k:'gc',l:'Ghi chú',w:'20%'}],tableData('m14','minhchung'));
+  if(t14.length){ push(bSubH('14. Hồ sơ minh chứng')); t14.forEach(push); }
+  // Dashboard
+  push(bSubH('15. Dashboard phát triển'));
+  var dm=dashMetrics();
+  push('<table class="pdf-tbl"><thead><tr><th style="width:30%">Lĩnh vực</th><th style="width:30%">Mức độ</th><th>Ghi chú</th></tr></thead><tbody>'+
+    dm.map(function(m){ var n=Math.max(0,Math.min(5,Math.round(m.val)));
+      var st=''; for(var i=0;i<5;i++) st+=i<n?'★':'<span style="color:#dfe4ef">★</span>';
+      return '<tr><td><b>'+esc(m.label)+'</b></td><td class="pdf-stars">'+st+'</td><td>'+esc(m.note)+'</td></tr>';
+    }).join('')+'</tbody></table>');
+
+  /* Optional modules with data */
+  var optBlocks=[];
+  OPTIONAL.forEach(function(m){
+    if(!STATE.opened[m.id]) return;
+    var local=[];
+    m.cards.forEach(function(c){
+      if(c.fields){ var kv=c.fields.map(function(f){return [f.l,fv(m.id,f.k)];});
+        var h=bKV(kv); if(h) local.push(h); }
+      else if(c.table){ var tb=bTableBlocks(c.table.cols.map(function(c){return {k:c.k,l:c.l};}),tableData(m.id,c.table.k)); tb.forEach(function(x){local.push(x);}); }
+    });
+    if(local.length){ optBlocks.push(bSubH('＋ '+m.title)); local.forEach(function(x){optBlocks.push(x);}); }
+  });
+  if(optBlocks.length){ push(bSection('Phần V — Module mở (theo định hướng riêng)')); optBlocks.forEach(push); }
+
+  return B;
+}
+
+function paginate(blocks){
+  // measure each block, distribute into pages
+  var area=$('#pdfArea'); area.innerHTML='';
+  var measure=ce('div'); measure.style.cssText='position:absolute;left:0;top:0;width:710px;visibility:hidden';
+  area.appendChild(measure);
+  var LIMIT=900;
+  var pages=[]; var cur=[]; var curH=0;
+  blocks.forEach(function(html){
+    measure.innerHTML=html; var h=measure.offsetHeight+8;
+    if(curH+h>LIMIT && cur.length>0){ pages.push(cur); cur=[]; curH=0; }
+    cur.push(html); curH+=h;
+  });
+  if(cur.length) pages.push(cur);
+  area.removeChild(measure);
+  return pages;
+}
+function buildPDFPages(){
+  var area=$('#pdfArea'); area.innerHTML='';
+  var els=[];
+  // cover
+  var cover=buildCover(); area.appendChild(cover); els.push(cover);
+  // content
+  var blocks=buildContentBlocks();
+  var pages=paginate(blocks);
+  pages.forEach(function(pg,i){
+    var page=ce('div','pdf-page');
+    page.innerHTML=pHeaderHTML()+'<div class="pdf-body">'+pg.join('')+'</div>'+pFooterHTML(i+1);
+    area.appendChild(page); els.push(page);
+  });
+  return els;
+}
+async function exportPDF(){
+  if(typeof window.jspdf==='undefined'||typeof html2canvas==='undefined'){ toast('Đang tải thư viện, thử lại sau giây lát…'); return; }
+  toast('Đang tạo PDF…');
+  var els=buildPDFPages();
+  await new Promise(function(r){setTimeout(r,120);});
+  try{
+    var jsPDF=window.jspdf.jsPDF;
+    var pdf=new jsPDF('p','mm','a4');
+    var pw=210, ph=297;
+    for(var i=0;i<els.length;i++){
+      var canvas=await html2canvas(els[i],{scale:2,useCORS:true,backgroundColor:'#ffffff',windowWidth:794});
+      var img=canvas.toDataURL('image/jpeg',0.92);
+      var iw=pw, ih=canvas.height*pw/canvas.width;
+      if(i>0) pdf.addPage();
+      if(ih<=ph){ pdf.addImage(img,'JPEG',0,0,iw,ih); }
+      else {
+        // safety: scale to fit height
+        var s=ph/ih; pdf.addImage(img,'JPEG',(pw-iw*s)/2,0,iw*s,ph);
+      }
+    }
+    var name=(fv('m1','hoten')||'HocSinh').trim().replace(/\s+/g,'_');
+    pdf.save('HoSo_DinhHuong_HNA_'+name+'.pdf');
+    toast('Đã xuất PDF thành công',true);
+  }catch(e){ console.error(e); toast('Lỗi khi tạo PDF — vui lòng thử lại'); }
+  $('#pdfArea').innerHTML='';
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+function init(){
+  loadLocal();
+  renderNav();
+  renderMain();
+  $('#btnSave').onclick=function(){ saveLocal(false); };
+  $('#btnExport').onclick=exportJSON;
+  $('#btnImport').onclick=function(){ $('#fileImport').click(); };
+  $('#fileImport').onchange=function(){ if(this.files[0]) importJSON(this.files[0]); this.value=''; };
+  $('#btnPdf').onclick=exportPDF;
+  $('#menuToggle').onclick=function(){ $('#sidebar').classList.toggle('open'); };
+  window.addEventListener('beforeunload',function(){ saveLocal(true); });
+}
+document.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
