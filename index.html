@@ -236,11 +236,13 @@ a{color:var(--navy-2)}
 .pdf-cover .cv-lg{width:74px;height:74px;border-radius:18px;background:#F6B115;color:#142768;display:grid;place-items:center;font-weight:800;font-size:38px;margin:0 auto 26px}
 .pdf-cover .cv-org{font-size:15px;font-weight:800;color:#142768;letter-spacing:1px;text-transform:uppercase}
 .pdf-cover .cv-tl{font-size:32px;font-weight:800;color:#142768;line-height:1.2;margin:18px 0 12px}
-.pdf-cover .cv-dv{width:70px;height:4px;background:#F6B115;border-radius:9px;margin:0 auto 16px}
+.pdf-cover .cv-dv{width:70px;height:4px;background:#F6B115;border-radius:99px;margin:0 auto 16px}
 .pdf-cover .cv-sub{font-size:13.5px;color:#5b657a;max-width:520px;margin:0 auto 30px;line-height:1.6}
 .pdf-cover .cv-name{font-size:22px;font-weight:800;color:#1d3690}
 .pdf-cover .cv-meta{font-size:13px;color:#5b657a;margin-top:6px}
 .pdf-cover .cv-tag{margin-top:40px;font-size:13px;font-style:italic;color:#142768}
+.pdf-cover .cv-stars{font-size:17px;letter-spacing:2px;color:#F6B115}
+.pdf-cover .cv-stars .e{color:#dfe4ef}
 .pdf-stars{font-size:17px;letter-spacing:2px;color:#F6B115}
 .pdf-stars .e{color:#dfe4ef}
 
@@ -264,12 +266,12 @@ a{color:var(--navy-2)}
     </div>
   </div>
   <div class="spacer"></div>
-  <button class="tbtn" id="btnSave" title="Lưu vào trình duyệt">
+  <button class="tbtn" id="btnSave" title="Đồng bộ dữ liệu lên Google Sheets">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></svg>
     Lưu
   </button>
-  <button class="tbtn" id="btnExport" title="Tải file dữ liệu (.json)">Sao lưu</button>
-  <button class="tbtn" id="btnImport" title="Nạp file dữ liệu (.json)">Khôi phục</button>
+  <button class="tbtn" id="btnExport" title="Tải file dữ liệu (.json)">Sau lưu nháp</button>
+  <button class="tbtn" id="btnImport" title="Nạp file dữ liệu (.json)">Khôi phục nháp</button>
   <input type="file" id="fileImport" accept="application/json" class="hide">
   <button class="tbtn amber" id="btnPdf">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M12 18v-6M9 15h6"/></svg>
@@ -300,12 +302,15 @@ a{color:var(--navy-2)}
 
 var FOOTER = 'Hướng Nghiệp Alpha | Hotline: 096 937 4411 | Email: huongnghiepalpha@gmail.com | www.huongnghiepalpha.vn';
 
+/* ---------- Đường link Sheet Monkey API của bạn ---------- */
+var SHEET_MONKEY_URL = "https://api.sheetmonkey.io/form/s4mtNxUZjhLdauN3W3PBFd";
+
 /* ---------- Trạng thái ---------- */
 var STATE = { v:1, fields:{}, tables:{}, holland:{}, gardner:{}, opened:{} };
 
 /* ---------- HOLLAND (RIASEC — tên ILO tiếng Việt) ---------- */
 var HOLLAND_GROUPS = [
-  { key:'R', name:'Kỹ thuật', en:'Realistic', desc:'Thích làm việc với máy móc, công cụ, vật thật, hoạt động ngoài trời.' },
+  { key:'R', name:'Kỹ thuật', en:'Realistic', desc:'Thích làm việc với machine, công cụ, vật thật, hoạt động ngoài trời.' },
   { key:'I', name:'Nghiên cứu', en:'Investigative', desc:'Thích quan sát, phân tích, tìm tòi, giải quyết vấn đề bằng tư duy.' },
   { key:'A', name:'Nghệ thuật', en:'Artistic', desc:'Thích sáng tạo, thể hiện cảm xúc, làm việc tự do và giàu trí tưởng tượng.' },
   { key:'S', name:'Xã hội', en:'Social', desc:'Thích giúp đỡ, dạy dỗ, chăm sóc và làm việc cùng con người.' },
@@ -634,14 +639,12 @@ function gardnerTop(){
 
 /* ---------- Completion / progress ---------- */
 function moduleFilled(m){
-  // returns true if module has meaningful data
   if(m.id==='m2'){
     var h=Object.keys(STATE.holland).length>0, g=Object.keys(STATE.gardner).length>0;
     return h||g||anyField(m);
   }
-  if(m.id==='m15') return false; // dashboard auto
+  if(m.id==='m15') return false;
   if(anyField(m)) return true;
-  // any table row with content
   var has=false;
   m.cards.forEach(function(c){ if(c.table){ var d=tableData(m.id,c.table.k);
     d.forEach(function(r){ for(var k in r){ if(r[k]&&String(r[k]).trim()){has=true;} } }); } });
@@ -654,7 +657,6 @@ function anyField(m){
 function progress(){
   var core=ALL_MODULES.filter(function(m){return m.id!=='m15';});
   var done=0; core.forEach(function(m){ if(moduleFilled(m)) done++; });
-  // count assessments as bonus weight handled by m2
   return Math.round(done/core.length*100);
 }
 function updateProgress(){
@@ -679,7 +681,6 @@ function renderNav(){
     });
     nav.appendChild(p);
   });
-  // optional modules
   var oh=ce('div','opt-head','＋ Module mở (kích hoạt khi cần)');
   nav.appendChild(oh);
   OPTIONAL.forEach(function(m){
@@ -687,7 +688,7 @@ function renderNav(){
     var b=ce('button','nav-item'+(m.id===current?' active':'')+(moduleFilled(m)?' done':''));
     b.innerHTML='<span class="dot"></span>'+m.title;
     b.onclick=function(){go(m.id);};
-    nav.appendChild(b);
+    p.appendChild(b);
   });
   var add=ce('button','nav-item','<span class="dot" style="background:var(--amber)"></span><span style="color:var(--amber);font-weight:700">Quản lý module mở…</span>');
   add.onclick=function(){go('optmgr');};
@@ -704,14 +705,14 @@ function fieldEl(mid,f){
   var lab='<label>'+esc(f.l)+(f.d?' <span class="desc">— '+esc(f.d)+'</span>':'')+'</label>';
   var val=fv(mid,f.k);
   var el;
-  if(f.t==='area'){ el='<textarea data-k="'+f.k+'" placeholder="'+esc(f.ph||'')+'">'+esc(val)+'</textarea>'; }
+  if(f.t==='area'){ el='<textarea data-k="'+f.k+'" name="'+f.k+'" placeholder="'+esc(f.ph||'')+'">'+esc(val)+'</textarea>'; }
   else if(f.t==='select'){
     var o='<option value="">— Chọn —</option>';
     f.opts.forEach(function(op){o+='<option'+(op===val?' selected':'')+'>'+esc(op)+'</option>';});
-    el='<select data-k="'+f.k+'">'+o+'</select>';
+    el='<select data-k="'+f.k+'" name="'+f.k+'">'+o+'</select>';
   } else {
     var type=f.t==='date'?'date':(f.t==='num'?'number':'text');
-    el='<input type="'+type+'" data-k="'+f.k+'" value="'+esc(val)+'" placeholder="'+esc(f.ph||'')+'">';
+    el='<input type="'+type+'" data-k="'+f.k+'" name="'+f.k+'" value="'+esc(val)+'" placeholder="'+esc(f.ph||'')+'">';
   }
   wrap.innerHTML=lab+el;
   var input=wrap.querySelector('[data-k]');
@@ -730,7 +731,6 @@ function tableEl(mid,tb){
   var tbody=ce('tbody'); tbl.appendChild(tbody);
   wrap.appendChild(tbl);
 
-  // ensure default rows
   var data=tableData(mid,tb.k);
   if(data.length===0 && tb.defaultRows){
     tb.defaultRows.forEach(function(r){ var row={}; for(var k in r) row[k]=r[k]; data.push(row); });
@@ -745,15 +745,14 @@ function tableEl(mid,tb){
       tb.cols.forEach(function(c){
         var td=ce('td'); var v=row[c.k]||'';
         if(c.fixed||(tb.fixed&&c.t==='text'&&c.k===tb.cols[0].k)){
-          // first column of fixed tables = label, read-only
           td.innerHTML='<div style="font-weight:600;color:var(--navy);font-size:13px;padding:7px 4px">'+esc(v)+'</div>';
         } else if(c.t==='area'){
-          td.innerHTML='<textarea data-c="'+c.k+'">'+esc(v)+'</textarea>';
+          td.innerHTML='<textarea data-c="'+c.k+'" data-ri="'+ri+'">'+esc(v)+'</textarea>';
         } else if(c.t==='select'){
           var o='<option value="">—</option>'; c.opts.forEach(function(op){o+='<option'+(op===v?' selected':'')+'>'+esc(op)+'</option>';});
-          td.innerHTML='<select data-c="'+c.k+'">'+o+'</select>';
+          td.innerHTML='<select data-c="'+c.k+'" data-ri="'+ri+'">'+o+'</select>';
         } else {
-          td.innerHTML='<input type="text" data-c="'+c.k+'" value="'+esc(v)+'">';
+          td.innerHTML='<input type="text" data-c="'+c.k+'" data-ri="'+ri+'" value="'+esc(v)+'">';
         }
         var inp=td.querySelector('[data-c]');
         if(inp){ inp.addEventListener('input',function(){ row[this.getAttribute('data-c')]=this.value; scheduleAuto(); markNav(); });
@@ -858,28 +857,23 @@ function drawGardnerResult(){
 /* ============================================================
    RENDER — DASHBOARD
    ============================================================ */
-function starStr(n){ // n: 0..5
+function starStr(n){
   n=Math.max(0,Math.min(5,Math.round(n)));
   var s=''; for(var i=0;i<5;i++) s+= i<n?'★':'<span class="e">★</span>'; return s;
 }
 function dashMetrics(){
-  // Năng lực: trung bình mức M3
   var nl=tableData('m3','nangluc'); var sum=0,cnt=0;
   nl.forEach(function(r){ if(r.muc){ sum+=parseInt(r.muc,10); cnt++; } });
-  var mNL = cnt? (sum/cnt) : 0; // 1..5
-  // Phẩm chất: số phẩm chất có minh chứng / 5 *5
+  var mNL = cnt? (sum/cnt) : 0;
   var pc=tableData('m4','phamchat'); var pcd=0; pc.forEach(function(r){ if(r.mc&&r.mc.trim())pcd++; });
   var mPC = pcd/5*5;
-  // Học tập: dựa trên việc điền M5 (tổng quan + số học kỳ)
   var ht=0; var f5=STATE.fields['m5']||{}; ['monmanh','moncaithien','kehoach_hoc'].forEach(function(k){if(f5[k]&&f5[k].trim())ht++;});
   var hk=tableData('m5','hocky').filter(function(r){return r.hk&&r.hk.trim();}).length;
   var mHT = Math.min(5, ht + Math.min(2,hk));
-  // Trải nghiệm: số mục M6+M7+M8
   var tn=0;
   ['trainghiem','duan','thanhtich'].forEach(function(k){ var mid=k==='trainghiem'?'m6':(k==='duan'?'m7':'m8');
     tableData(mid,k).forEach(function(r){ for(var x in r){ if(r[x]&&String(r[x]).trim()){tn++;break;} } }); });
   var mTN = Math.min(5, tn);
-  // Nghề nghiệp: số mục M9-M11 + kế hoạch M12
   var ngc=0;
   [['m9','nghe'],['m10','nganh'],['m11','truong']].forEach(function(p){
     tableData(p[0],p[1]).forEach(function(r){ for(var x in r){ if(r[x]&&String(r[x]).trim()){ngc++;break;} } }); });
@@ -902,7 +896,6 @@ function dashboardEl(){
     grid.appendChild(it);
   });
   box.appendChild(grid);
-  // insight
   var ms=dashMetrics(); var weak=ms.slice().sort(function(a,b){return a.val-b.val;})[0];
   var strong=ms.slice().sort(function(a,b){return b.val-a.val;})[0];
   var ins=ce('div','callout'); ins.style.marginTop='14px';
@@ -931,10 +924,9 @@ function go(id){
   window.scrollTo(0,0);
 }
 function markNav(){
-  // update done dots + progress without full re-render
-  var items=$('#nav').querySelectorAll('.nav-item');
   renderNav();
 }
+
 function cardEl(m,c){
   var card=ce('div','card');
   var head='<h3>'+esc(c.h)+(c.tag?'<span class="tag">'+esc(c.tag)+'</span>':'')+'</h3>';
@@ -950,27 +942,38 @@ function cardEl(m,c){
   }
   return card;
 }
+
 function renderMain(){
   var main=$('#main'); main.innerHTML='';
   if(current==='optmgr'){ renderOptMgr(); return; }
   var m=moduleById(current); if(!m){ go('m1'); return; }
+  
+  // Bọc tất cả các Card vào trong thẻ <form> để có thể trích xuất dữ liệu hàng loạt đẩy về Sheet Monkey
+  var formWrapper = ce('form', 'dynamic-module-form');
+  formWrapper.id = "activeModuleForm";
+  formWrapper.action = SHEET_MONKEY_URL;
+  formWrapper.method = "POST";
+
   var head=ce('div','page-head');
   head.innerHTML='<div class="eyebrow">'+esc(m.eyebrow||'Module mở')+'</div><h2>'+esc(m.title)+'</h2>'+(m.sub?'<div class="sub">'+esc(m.sub)+'</div>':'');
-  main.appendChild(head);
-  m.cards.forEach(function(c){ main.appendChild(cardEl(m,c)); });
+  formWrapper.appendChild(head);
+  
+  m.cards.forEach(function(c){ formWrapper.appendChild(cardEl(m,c)); });
 
-  // nav buttons
+  // Nút chuyển module / nộp form
   var idx=ALL_MODULES.findIndex(function(x){return x.id===m.id;});
   if(idx>=0){
     var foot=ce('div','module-foot');
     var prev=idx>0?ALL_MODULES[idx-1]:null;
     var next=idx<ALL_MODULES.length-1?ALL_MODULES[idx+1]:null;
-    foot.innerHTML='<div>'+(prev?'<button class="ghost" data-go="'+prev.id+'">← '+esc(prev.title)+'</button>':'')+'</div>'+
-                   '<div>'+(next?'<button class="primary" data-go="'+next.id+'">'+esc(next.title)+' →</button>':'<button class="primary" id="finishBtn">Hoàn tất · Xuất PDF →</button>')+'</div>';
-    main.appendChild(foot);
+    foot.innerHTML='<div>'+(prev?'<button type="button" class="ghost" data-go="'+prev.id+'">← '+esc(prev.title)+'</button>':'')+'</div>'+
+                   '<div>'+(next?'<button type="button" class="primary" data-go="'+next.id+'">'+esc(next.title)+' →</button>':'<button type="button" class="primary" id="finishBtn">Hoàn tất · Xuất PDF →</button>')+'</div>';
+    formWrapper.appendChild(foot);
     foot.querySelectorAll('[data-go]').forEach(function(b){ b.onclick=function(){go(this.getAttribute('data-go'));}; });
-    var fb=document.getElementById('finishBtn'); if(fb) fb.onclick=exportPDF;
+    var fb=formWrapper.querySelector('#finishBtn'); if(fb) fb.onclick=exportPDF;
   }
+  
+  main.appendChild(formWrapper);
 }
 
 /* ============================================================
@@ -998,16 +1001,79 @@ function renderOptMgr(){
 function renderOptMgr2(){ $('#main').innerHTML=''; renderOptMgr(); }
 
 /* ============================================================
-   PERSISTENCE
+   PERSISTENCE & GOOGLE SHEETS INTEGRATION (SHEET MONKEY)
    ============================================================ */
 var LSKEY='hna_hoso_v1';
 function toast(msg,ok){ var t=$('#toast'); t.textContent=msg; t.className='toast show'+(ok?' ok':''); setTimeout(function(){t.className='toast';},2200); }
 var autoT=null;
 function scheduleAuto(){ clearTimeout(autoT); autoT=setTimeout(function(){ saveLocal(true); updateProgress(); },800); }
-function saveLocal(silent){
-  try{ localStorage.setItem(LSKEY,JSON.stringify(STATE)); if(!silent)toast('Đã lưu vào trình duyệt',true); }
-  catch(e){ if(!silent)toast('Trình duyệt không cho lưu — hãy dùng nút Sao lưu'); }
+
+// Hàm nộp ngầm dữ liệu lên Google Sheets thông qua Sheet Monkey API
+function syncToGoogleSheets() {
+  // Gom toàn bộ dữ liệu từ STATE (bao gồm cả các trường và bảng của tất cả module) thành một Object phẳng
+  var flatData = {};
+  
+  // 1. Gom tất cả các trường input/textarea thông thường
+  for (var mid in STATE.fields) {
+    for (var key in STATE.fields[mid]) {
+      flatData[mid + "_" + key] = STATE.fields[mid][key];
+    }
+  }
+  
+  // 2. Gom tất cả dữ liệu từ các bảng (Chuyển mảng thành dạng chuỗi text hoặc ô dữ liệu cụ thể để lưu trên hàng Excel)
+  for (var tableId in STATE.tables) {
+    var rows = STATE.tables[tableId];
+    if (rows && rows.length > 0) {
+      flatData[tableId] = JSON.stringify(rows); // Lưu cấu trúc bảng dưới dạng chuỗi JSON thô để phân tích nâng cao
+    }
+  }
+
+  // 3. Gom kết quả trắc nghiệm Holland và Gardner
+  var ht = hollandTop();
+  if (ht.some(function(x){return x.raw > 0;})) {
+    flatData["Holland_Code"] = ht.slice(0,3).map(function(t){return t.key;}).join('');
+    flatData["Holland_Details"] = JSON.stringify(hollandScores());
+  }
+  var gt = gardnerTop();
+  if (gt.some(function(x){return x.raw > 0;})) {
+    flatData["Gardner_Top3"] = gt.slice(0,3).map(function(t){return t.name;}).join(', ');
+    flatData["Gardner_Details"] = JSON.stringify(gardnerScores());
+  }
+
+  flatData["ThoiGianDongBo"] = new Date().toLocaleString('vi-VN');
+  flatData["TienDoHoanThanh"] = progress() + "%";
+
+  // Tiến hành fetch API chạy ngầm gửi lên hệ thống Sheet Monkey
+  fetch(SHEET_MONKEY_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(flatData),
+    mode: 'cors'
+  })
+  .then(function(res) {
+    if (res.ok) {
+      console.log("Đã đồng bộ thành công dữ liệu lên hệ thống Google Sheets!");
+    }
+  })
+  .catch(function(err) {
+    console.error("Lỗi đồng bộ tự động lên Google Sheets:", err);
+  });
 }
+
+function saveLocal(silent){
+  try{ 
+    localStorage.setItem(LSKEY,JSON.stringify(STATE)); 
+    if(!silent) {
+      toast('Đã lưu và đồng bộ thành công dữ liệu hồ sơ!', true);
+    }
+    // Kích hoạt đồng bộ dữ liệu ngầm lên Google Sheets mỗi khi dữ liệu thay đổi
+    syncToGoogleSheets();
+  }
+  catch(e){ 
+    if(!silent) toast('Trình duyệt đầy dung lượng — hãy dùng nút Sao lưu nháp'); 
+  }
+}
+
 function loadLocal(){
   try{ var s=localStorage.getItem(LSKEY); if(s){ var d=JSON.parse(s); mergeState(d); return true; } }catch(e){}
   return false;
@@ -1016,17 +1082,18 @@ function mergeState(d){
   if(!d) return;
   STATE.fields=d.fields||{}; STATE.tables=d.tables||{}; STATE.holland=d.holland||{}; STATE.gardner=d.gardner||{}; STATE.opened=d.opened||{};
 }
+
 function exportJSON(){
   var blob=new Blob([JSON.stringify(STATE,null,2)],{type:'application/json'});
   var name=(fv('m1','hoten')||'hoso').trim().replace(/\s+/g,'_');
   var a=ce('a'); a.href=URL.createObjectURL(blob); a.download='HoSo_HNA_'+name+'.json'; a.click();
   setTimeout(function(){URL.revokeObjectURL(a.href);},500);
-  toast('Đã tải file sao lưu (.json)',true);
+  toast('Đã tải file sao lưu nháp (.json)',true);
 }
 function importJSON(file){
   var r=new FileReader();
-  r.onload=function(){ try{ var d=JSON.parse(r.result); mergeState(d); saveLocal(true); go(current); toast('Đã khôi phục dữ liệu',true); }
-    catch(e){ toast('File không hợp lệ'); } };
+  r.onload=function(){ try{ var d=JSON.parse(r.result); mergeState(d); saveLocal(true); go(current); toast('Đã khôi phục dữ liệu nháp',true); }
+    catch(e){ toast('File sao lưu không hợp lệ'); } };
   r.readAsText(file);
 }
 
@@ -1042,15 +1109,13 @@ function pFooterHTML(pageNo){
 function bSection(t){ return '<div class="pdf-sec">'+esc(t)+'</div>'; }
 function bSubH(t){ return '<div class="pdf-sub-h">'+esc(t)+'</div>'; }
 function bText(label,val){ if(!val||!String(val).trim())return ''; return '<div class="pdf-sub-h">'+esc(label)+'</div><div class="pdf-text">'+nl2(val)+'</div>'; }
-function bKV(pairs){ // pairs: [[k,v],...]
+function bKV(pairs){
   var rows=pairs.filter(function(p){return p[1]&&String(p[1]).trim();})
     .map(function(p){return '<div class="pdf-kv"><div class="k">'+esc(p[0])+'</div><div class="v">'+nl2(p[1])+'</div></div>';}).join('');
   return rows;
 }
-function bBars(items){ // items: [{name,pct}]
-  return items.map(function(it){return '<div class="pdf-bar"><div class="n">'+esc(it.name)+'</div><div class="t"><div class="f" style="width:'+it.pct+'%"></div></div><div class="vv">'+it.pct+'%</div></div>';}).join('');
-}
-// table → array of block HTML (chunked), each ≤ CH rows, repeats header
+function bBars(items){ return items.map(function(it){return '<div class="pdf-bar"><div class="n">'+esc(it.name)+'</div><div class="t"><div class="f" style="width:'+it.pct+'%"></div></div><div class="vv">'+it.pct+'%</div></div>';}).join(''); }
+
 function bTableBlocks(cols,rows,title){
   rows=rows.filter(function(r){ for(var k in r){ if(r[k]&&String(r[k]).trim())return true;} return false; });
   if(rows.length===0) return [];
@@ -1061,7 +1126,6 @@ function bTableBlocks(cols,rows,title){
     var body=chunk.map(function(r){
       return '<tr>'+cols.map(function(c){return '<td>'+nl2(r[c.k]||'')+'</td>';}).join('')+'</tr>';
     }).join('');
-    var cap=(title&&i===0)?'':''; // title handled outside
     out.push('<table class="pdf-tbl"><thead><tr>'+th+'</tr></thead><tbody>'+body+'</tbody></table>');
   }
   return out;
@@ -1088,14 +1152,12 @@ function buildCover(){
   return page;
 }
 
-// Build content blocks (array of HTML strings)
 function buildContentBlocks(){
   var B=[];
   function push(h){ if(h&&h.trim()) B.push(h); }
 
   /* PHẦN I */
   push(bSection('Phần I — Nhận diện bản thân'));
-  // M1
   push(bSubH('1. Hồ sơ cá nhân'));
   push(bKV([
     ['Họ và tên',fv('m1','hoten')],['Ngày sinh',fv('m1','ngaysinh')],['Giới tính',fv('m1','gioitinh')],
@@ -1108,7 +1170,7 @@ function buildContentBlocks(){
   push(bText('Kỳ vọng của gia đình',fv('m1','hotro_gd')));
   push(bText('Ước mơ ban đầu',fv('m1','uocmo')));
   push(bText('Người truyền cảm hứng',fv('m1','thantuong')));
-  // M2
+  
   push(bSubH('2. Khám phá bản thân — Hiểu mình'));
   var ht=hollandTop(); if(ht.some(function(x){return x.raw>0;})){
     push('<div class="pdf-text" style="margin-bottom:4px"><b>Trắc nghiệm sở thích Holland (RIASEC)</b> — Mã Holland: <b style="color:#1d3690">'+ht.slice(0,3).map(function(t){return t.key;}).join('')+'</b> · Nhóm nổi bật: '+ht.slice(0,3).map(function(t){return t.name;}).join(', ')+'</div>');
@@ -1120,13 +1182,12 @@ function buildContentBlocks(){
   }
   push(bText('Giá trị sống',fv('m2','giatri')));
   push(bKV([['Sở thích',fv('m2','sothich')],['Điểm mạnh',fv('m2','diemmanh')],['Điểm cần cải thiện',fv('m2','caithien')],['Phong cách học',fv('m2','phongcach')],['Động lực',fv('m2','dongluc')]]));
-  // M3
+  
   var nlRows=tableData('m3','nangluc');
   if(nlRows.some(function(r){return r.muc||r.mc||r.kh;})){
     push(bSubH('3. Hồ sơ năng lực (CTGDPT 2018)'));
     bTableBlocks([{k:'nl',l:'Năng lực',w:'24%'},{k:'muc',l:'Mức',w:'10%'},{k:'mc',l:'Minh chứng',w:'33%'},{k:'kh',l:'Kế hoạch',w:'33%'}],nlRows).forEach(push);
   }
-  // M4
   var pcRows=tableData('m4','phamchat');
   if(pcRows.some(function(r){return r.mc;})){
     push(bSubH('4. Hồ sơ phẩm chất'));
@@ -1165,8 +1226,8 @@ function buildContentBlocks(){
   var t13=bTableBlocks([{k:'hk',l:'Mốc',w:'16%'},{k:'tuhao',l:'Điều tự hào',w:'22%'},{k:'thatbai',l:'Chưa thành công',w:'21%'},{k:'baihoc',l:'Bài học',w:'21%'},{k:'muctieu',l:'Mục tiêu mới',w:'20%'}],tableData('m13','nhatky'));
   if(t13.length){ push(bSubH('13. Nhật ký phát triển')); t13.forEach(push); }
   var t14=bTableBlocks([{k:'ten',l:'Minh chứng',w:'30%'},{k:'loai',l:'Loại',w:'18%'},{k:'link',l:'Đường dẫn',w:'32%'},{k:'gc',l:'Ghi chú',w:'20%'}],tableData('m14','minhchung'));
-  if(t14.length){ push(bSubH('14. Hồ sơ minh chứng')); t14.forEach(push); }
-  // Dashboard
+  if(t14.length){ push(bSubH('14. Hồ sơ minh chứng')); t14.length && t14.forEach(push); }
+  
   push(bSubH('15. Dashboard phát triển'));
   var dm=dashMetrics();
   push('<table class="pdf-tbl"><thead><tr><th style="width:30%">Lĩnh vực</th><th style="width:30%">Mức độ</th><th>Ghi chú</th></tr></thead><tbody>'+
@@ -1175,7 +1236,6 @@ function buildContentBlocks(){
       return '<tr><td><b>'+esc(m.label)+'</b></td><td class="pdf-stars">'+st+'</td><td>'+esc(m.note)+'</td></tr>';
     }).join('')+'</tbody></table>');
 
-  /* Optional modules with data */
   var optBlocks=[];
   OPTIONAL.forEach(function(m){
     if(!STATE.opened[m.id]) return;
@@ -1193,7 +1253,6 @@ function buildContentBlocks(){
 }
 
 function paginate(blocks){
-  // measure each block, distribute into pages
   var area=$('#pdfArea'); area.innerHTML='';
   var measure=ce('div'); measure.style.cssText='position:absolute;left:0;top:0;width:710px;visibility:hidden';
   area.appendChild(measure);
@@ -1211,9 +1270,7 @@ function paginate(blocks){
 function buildPDFPages(){
   var area=$('#pdfArea'); area.innerHTML='';
   var els=[];
-  // cover
   var cover=buildCover(); area.appendChild(cover); els.push(cover);
-  // content
   var blocks=buildContentBlocks();
   var pages=paginate(blocks);
   pages.forEach(function(pg,i){
@@ -1225,7 +1282,7 @@ function buildPDFPages(){
 }
 async function exportPDF(){
   if(typeof window.jspdf==='undefined'||typeof html2canvas==='undefined'){ toast('Đang tải thư viện, thử lại sau giây lát…'); return; }
-  toast('Đang tạo PDF…');
+  toast('Đang tạo file PDF hồ sơ…');
   var els=buildPDFPages();
   await new Promise(function(r){setTimeout(r,120);});
   try{
@@ -1239,14 +1296,13 @@ async function exportPDF(){
       if(i>0) pdf.addPage();
       if(ih<=ph){ pdf.addImage(img,'JPEG',0,0,iw,ih); }
       else {
-        // safety: scale to fit height
         var s=ph/ih; pdf.addImage(img,'JPEG',(pw-iw*s)/2,0,iw*s,ph);
       }
     }
     var name=(fv('m1','hoten')||'HocSinh').trim().replace(/\s+/g,'_');
     pdf.save('HoSo_DinhHuong_HNA_'+name+'.pdf');
-    toast('Đã xuất PDF thành công',true);
-  }catch(e){ console.error(e); toast('Lỗi khi tạo PDF — vui lòng thử lại'); }
+    toast('Đã xuất thành công file PDF!',true);
+  }catch(e){ console.error(e); toast('Lỗi hệ thống xuất PDF — Vui lòng thử lại'); }
   $('#pdfArea').innerHTML='';
 }
 
@@ -1263,6 +1319,8 @@ function init(){
   $('#fileImport').onchange=function(){ if(this.files[0]) importJSON(this.files[0]); this.value=''; };
   $('#btnPdf').onclick=exportPDF;
   $('#menuToggle').onclick=function(){ $('#sidebar').classList.toggle('open'); };
+  
+  // Tự động sao lưu đồng bộ khi học sinh đóng hoặc reload tab trình duyệt
   window.addEventListener('beforeunload',function(){ saveLocal(true); });
 }
 document.addEventListener('DOMContentLoaded',init);
